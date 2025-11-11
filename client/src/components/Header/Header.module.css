@@ -13,3 +13,15 @@
   display: flex;
   gap: 16px;
 }
+
+@media (max-width: 900px) {
+  .header {
+    position: relative;
+    top: 12px;
+  }
+
+  .navigation {
+    position: absolute;
+    right: 0;
+  }
+}

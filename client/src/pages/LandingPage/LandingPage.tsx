@@ -5,9 +5,11 @@ import styles from './LandingPage.module.css';
 
 const LandingPage: React.FC = () => {
   return (
-    <div className={styles.landingPage}>
-      <Header />
-      <Hero />
+    <div className={styles.landingPageContainer}>
+      <div className={styles.contentWrapper}>
+        <Header />
+        <Hero />
+      </div>
     </div>
   );
 };

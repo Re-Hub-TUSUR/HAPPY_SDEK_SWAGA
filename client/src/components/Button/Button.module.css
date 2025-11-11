@@ -1,41 +1,67 @@
 .btn {
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px;
+}
+.icon {
+  display: flex;
+  align-items: center;
 }
 
-.primary {
-  background-color: #00B34A;
-  color: white;
-  border-color: #00B34A;
+.primary { 
+    background-color: #02A337; 
+    color: white; 
+    border: 1px solid #FFFFFF; 
+    border-radius: 40px; 
+    height: 40px; 
 }
-.primary:hover {
-  background-color: #00993F;
-  border-color: #00993F;
-}
-
-.secondary {
-  background-color: white;
-  color: #333;
-  border: 1px solid #ccc;
-}
-.secondary:hover {
-  background-color: #f5f5f5;
-  border-color: #999;
+.primary:hover { 
+    opacity: 0.9; 
 }
 
-.cta {
-  background-color: #00B34A;
-  color: white;
-  border-color: #00B34A;
-  padding: 14px 32px;
-  font-size: 18px;
+.secondary { 
+    background-color: #FFFFFF; 
+    color: #2B2B2B; 
+    border: 1px solid #2B2B2B; 
+    border-radius: 30px; 
+    height: 40px; 
+}
+.secondary:hover { 
+    background-color: #f7f7f7; 
+}
+
+.cta { 
+    background-color: #02A337; 
+    color: white; 
+    border: none; 
+    border-radius: 15px; 
+    height: 45px; 
+    padding: 0 32px; 
+    font-size: 18px; 
+}
+.cta .icon { 
+    display: none; 
 }
 .cta:hover {
-  background-color: #00993F;
-  border-color: #00993F;
+    opacity: 0.9; 
+}
+
+@media (max-width: 900px) {
+  .primary, .secondary {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .primary .text, .secondary .text {
+    display: none;
+  }
 }
