@@ -1,0 +1,12 @@
+.env
+
+client/node_modules
+client/build
+
+server/venv
+server/__pycache__
+server/*.pyc
+
+.vscode/
+
+.DS_Store
