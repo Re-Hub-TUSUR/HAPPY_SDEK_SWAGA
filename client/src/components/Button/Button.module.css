@@ -1,0 +1,41 @@
+.btn {
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.primary {
+  background-color: #00B34A;
+  color: white;
+  border-color: #00B34A;
+}
+.primary:hover {
+  background-color: #00993F;
+  border-color: #00993F;
+}
+
+.secondary {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ccc;
+}
+.secondary:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+.cta {
+  background-color: #00B34A;
+  color: white;
+  border-color: #00B34A;
+  padding: 14px 32px;
+  font-size: 18px;
+}
+.cta:hover {
+  background-color: #00993F;
+  border-color: #00993F;
+}
