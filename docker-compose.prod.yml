@@ -1,0 +1,9 @@
+services:
+  client:
+    build: ./client
+    container_name: sdek_client_prod
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    restart: on-failure

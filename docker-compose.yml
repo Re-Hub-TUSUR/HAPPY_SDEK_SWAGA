@@ -6,10 +6,11 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "5432:5432"
+      - "5433:5432"
     restart: unless-stopped
 
   server:
@@ -29,15 +30,6 @@ services:
       - ./server:/app
     depends_on:
       - db
-    restart: on-failure
-
-  client:
-    build: ./client
-    container_name: sdek_client
-    ports:
-      - "3000:80"
-    depends_on:
-      - server
     restart: on-failure
 
 volumes:
