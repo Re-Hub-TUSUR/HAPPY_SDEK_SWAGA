@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './AuthModal.module.css';
 import { FiX } from 'react-icons/fi';
 import { useToast } from '../../contexts/ToastContext';
@@ -18,8 +19,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ variant, onClose, onSwitchToRegis
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const { addToast } = useToast();
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const isRegister = variant === 'register';
 
@@ -36,12 +39,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ variant, onClose, onSwitchToRegis
       if (isRegister) {
         const response = await authApi.register({ name, email, password });
         addToast(response.message, 'success');
-        onSwitchToLogin();
+        onSwitchToLogin(); 
       } else {
         const response = await authApi.login({ email, password });
-        login(response.access_token, response.refresh_token);
+        await login(response.access_token, response.refresh_token);
         addToast('Вход выполнен успешно!', 'success');
         onClose();
+        navigate('/dashboard');
       }
     } catch (error: any) {
       addToast(error.message || 'Произошла неизвестная ошибка', 'error');
@@ -71,21 +75,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ variant, onClose, onSwitchToRegis
           {isRegister && (
             <div className={styles.inputGroup}>
               <label htmlFor="name">Имя*</label>
-              <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Пожалуйста, введите ваше имя" required disabled={isLoading} />
+              <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Пожалуйста, введите ваше имя" required disabled={isLoading}/>
             </div>
           )}
           <div className={styles.inputGroup}>
             <label htmlFor="email">Почта*</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Введите вашу почту" required disabled={isLoading} />
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Введите вашу почту" required disabled={isLoading}/>
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="password">Пароль*</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Введите ваш пароль" required disabled={isLoading} />
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Введите ваш пароль" required disabled={isLoading}/>
           </div>
           {isRegister && (
             <div className={styles.inputGroup}>
               <label htmlFor="confirmPassword">Подтвердите пароль*</label>
-              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Повторите ваш пароль" required disabled={isLoading} />
+              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Повторите ваш пароль" required disabled={isLoading}/>
             </div>
           )}
           <button type="submit" className={styles.submitButton} disabled={isLoading}>

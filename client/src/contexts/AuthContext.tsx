@@ -11,7 +11,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: User | null;
-  login: (accessToken: string, refreshToken: string) => void;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
     setUser(null);
+    window.location.href = '/';
   }, []);
 
   const loadUser = useCallback(async () => {
@@ -38,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.error("Failed to fetch user:", error);
+      console.error("Failed to fetch user, logging out:", error);
       logout();
     } finally {
       setIsLoading(false);
@@ -54,7 +55,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem('refreshToken', refreshToken);
     await loadUser();
   }, [loadUser]);
-
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>

@@ -1,17 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/LandingPage';
-import { ToastProvider } from './contexts/ToastContext';
-import { AuthProvider } from './contexts/AuthContext';
+import DashboardPage from './pages/DashboardPage/DashboardPage';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import AuthModal from './components/AuthModal/AuthModal';
+import { useAuth } from './contexts/AuthContext';
+import Loader from './components/Loader/Loader';
+
+const Home = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const [modalType, setModalType] = useState<'login' | 'register' | null>(null);
+
+  const handleOpenLogin = () => setModalType('login');
+  const handleOpenRegister = () => setModalType('register');
+  const handleCloseModal = () => setModalType(null);
+  const handleSwitchToRegister = () => setModalType('register');
+  const handleSwitchToLogin = () => setModalType('login');
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return (
+    <>
+      <LandingPage onLoginClick={handleOpenLogin} onRegisterClick={handleOpenRegister} />
+      {modalType && (
+        <AuthModal
+          variant={modalType}
+          onClose={handleCloseModal}
+          onSwitchToRegister={handleSwitchToRegister}
+          onSwitchToLogin={handleSwitchToLogin}
+        />
+      )}
+    </>
+  );
+};
+
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <div>
-          <LandingPage />
-        </div>
-      </ToastProvider>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
