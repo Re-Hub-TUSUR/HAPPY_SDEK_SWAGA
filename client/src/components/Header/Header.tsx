@@ -4,15 +4,20 @@ import Button from '../Button/Button';
 import styles from './Header.module.css';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onLoginClick: () => void;
+  onRegisterClick: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick }) => {
   return (
     <header className={styles.header}>
       <img src={cdekLogo} alt="Логотип СДЭК" className={styles.logo} />
       <nav className={styles.navigation}>
-        <Button variant="primary" Icon={FiLogIn as any}>
+        <Button variant="primary" Icon={FiLogIn as any} onClick={onLoginClick}>
           Войти
         </Button>
-        <Button variant="secondary" Icon={FiUserPlus as any}>
+        <Button variant="secondary" Icon={FiUserPlus as any} onClick={onRegisterClick}>
           Зарегистрироваться
         </Button>
       </nav>

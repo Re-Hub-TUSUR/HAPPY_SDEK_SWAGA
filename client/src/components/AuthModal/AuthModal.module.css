@@ -1,0 +1,127 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContainer {
+  background-color: white;
+  padding: 40px;
+  border-radius: 24px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  padding: 4px;
+}
+.closeButton:hover {
+  color: #000;
+}
+
+.modalHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.modalHeader h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #272727;
+  margin: 0 0 8px 0;
+}
+
+.modalHeader p {
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+}
+
+.modalHeader p span {
+  color: #00A337;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.inputGroup input {
+  border: none;
+  border-bottom: 1px solid #E0E0E0;
+  padding: 8px 4px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input::placeholder {
+    color: #BDBDBD;
+    font-weight: 500;
+}
+
+.inputGroup input:focus {
+  border-bottom-color: #00A337;
+}
+
+.submitButton {
+  background-color: #00A337;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 24px;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .modalContainer {
+    width: calc(100% - 32px);
+    padding: 32px 24px;
+  }
+
+  .modalHeader h2 {
+    font-size: 24px;
+  }
+}
