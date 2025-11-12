@@ -1,14 +1,17 @@
 import React from 'react';
 import LandingPage from './pages/LandingPage/LandingPage';
 import { ToastProvider } from './contexts/ToastContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
-    <ToastProvider>
-      <div>
-        <LandingPage />
-      </div>
-    </ToastProvider>
+    <AuthProvider>
+      <ToastProvider>
+        <div>
+          <LandingPage />
+        </div>
+      </ToastProvider>
+    </AuthProvider>
   );
 }
 
