@@ -2,65 +2,64 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 0;
+  padding: 12px 40px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+  z-index: 10;
 }
 
 .logo {
   height: 32px;
+  flex-shrink: 0;
 }
 
-.navigation {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.userHeader {
+.desktopNav {
   display: flex;
   align-items: center;
-  gap: 48px;
   width: 100%;
 }
 
-.navLinks {
+.navTabs {
+  flex-grow: 1;
   display: flex;
+  justify-content: center;
   gap: 16px;
-  background-color: #f3f4f6;
-  padding: 6px;
-  border-radius: 12px;
 }
 
 .navLink {
   padding: 8px 16px;
   border-radius: 9px;
-  text-decoration: none;
   color: #6b7280;
   font-size: 15px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .navLink:hover {
-  background-color: #e5e7eb;
+  color: #111827;
 }
 
 .navLink.active {
-  background-color: #ffffff;
+  background-color: #F5F7FA;
   color: #111827;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .userInfo {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 16px;
   font-size: 15px;
+  flex-shrink: 0;
 }
 
 .userName {
   color: #374151;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .logoutButton {
@@ -77,15 +76,117 @@
   text-decoration: underline;
 }
 
+.mobileNav {
+  display: none;
+}
+
+.hamburgerButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  max-width: 320px;
+  height: 100%;
+  background-color: #FFFFFF;
+  z-index: 100;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.mobileMenuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.mobileMenuHeader .userName {
+  font-size: 18px;
+}
+
+.mobileMenuHeader button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobileMenuLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.mobileNavLink {
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: none;
+  background-color: transparent;
+  border-radius: 9px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+
+.mobileNavLink.active {
+  background-color: #F5F7FA;
+  color: #111827;
+  font-weight: 600;
+}
+
+.mobileLogoutButton {
+  background: none;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+}
 
 @media (max-width: 900px) {
   .header {
-    position: relative;
-    top: 12px;
+    padding: 12px 20px;
   }
-  
-  .navigation {
-    position: absolute;
-    right: 0;
+  .desktopNav {
+    display: none;
+  }
+  .mobileNav {
+    display: block;
   }
 }
