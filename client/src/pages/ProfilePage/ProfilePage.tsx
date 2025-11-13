@@ -5,7 +5,7 @@ import styles from './ProfilePage.module.css';
 
 const ProfilePage: React.FC = () => {
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} pageWithGradients`}>
       <Header
         onLoginClick={() => {}} 
         onRegisterClick={() => {}} 

@@ -4,7 +4,7 @@ import { authApi } from '../../services/authService';
 import { useToast } from '../../contexts/ToastContext';
 import ChangePasswordModal from './ChangePasswordModal';
 import styles from './Profile.module.css';
-import { FiEdit2, FiEyeOff } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -26,11 +26,17 @@ const Profile: React.FC = () => {
 
   const handleSave = async (field: 'name' | 'email') => {
     let payload: { name?: string; email?: string } = {};
+    let isChanged = false;
+
     if (field === 'name' && name !== user?.name) {
       payload = { name };
+      isChanged = true;
     } else if (field === 'email' && email !== user?.email) {
       payload = { email };
-    } else {
+      isChanged = true;
+    }
+
+    if (!isChanged) {
       setIsNameEditing(false);
       setIsEmailEditing(false);
       return;
@@ -40,13 +46,12 @@ const Profile: React.FC = () => {
       const updatedUser = await authApi.updateProfile(payload);
       updateUser(updatedUser);
       addToast('Данные успешно обновлены!', 'success');
-    } catch (error: any) {
-      addToast(error.response?.data?.message || 'Ошибка при сохранении', 'error');
-      setName(user?.name || '');
-      setEmail(user?.email || '');
-    } finally {
       setIsNameEditing(false);
       setIsEmailEditing(false);
+    } catch (error: any) {
+      addToast(error.message || 'Ошибка при сохранении', 'error');
+      setName(user?.name || '');
+      setEmail(user?.email || '');
     }
   };
   
@@ -61,8 +66,8 @@ const Profile: React.FC = () => {
       const updatedUser = await authApi.uploadAvatar(formData);
       updateUser(updatedUser);
       addToast('Изображение профиля обновлено!', 'success');
-    } catch (error) {
-      addToast('Ошибка при загрузке изображения', 'error');
+    } catch (error: any) {
+      addToast(error.message || 'Ошибка при загрузке изображения', 'error');
     }
   };
 
@@ -74,6 +79,7 @@ const Profile: React.FC = () => {
         <h2 className={styles.title}>Личный кабинет</h2>
         <div className={styles.grid}>
           <div className={styles.form}>
+            {/* Поле Имя */}
             <div className={styles.inputGroup}>
               <label htmlFor="name">Имя</label>
               <div className={styles.inputWrapper}>
@@ -86,6 +92,7 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
+            {/* Поле Почта */}
             <div className={styles.inputGroup}>
               <label htmlFor="email">Почта</label>
               <div className={styles.inputWrapper}>
@@ -96,9 +103,12 @@ const Profile: React.FC = () => {
                   <button onClick={() => setIsEmailEditing(true)} className={styles.iconButton}>{FiEdit2({})}</button>
                 )}
               </div>
-                <a href="#" onClick={(e) => { e.preventDefault(); setIsPasswordModalOpen(true); }} className={styles.changePasswordLink}>
-                    Хотите изменить пароль?
-                </a>
+            </div>
+            
+            <div className={styles.passwordSection}>
+              <a href="#" onClick={(e) => { e.preventDefault(); setIsPasswordModalOpen(true); }} className={styles.changePasswordLink}>
+                Хотите изменить пароль?
+              </a>
             </div>
           </div>
 

@@ -45,6 +45,7 @@
   color: #6b7280;
   margin: 0;
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .actions {
@@ -68,16 +69,18 @@
 .btnConfirm {
   background-color: #DC2626;
   color: #FFFFFF;
+  border-radius: 8px;
 }
 .btnConfirm:hover {
   background-color: #B91C1C;
 }
 
 .btnCancel {
-  background-color: #f3f4f6;
+  background-color: #FFFFFF;
   color: #374151;
   border: 1px solid #d1d5db;
+  border-radius: 8px;
 }
 .btnCancel:hover {
-  background-color: #e5e7eb;
+  background-color: #f9fafb;
 }

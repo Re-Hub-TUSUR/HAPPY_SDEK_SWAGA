@@ -1,27 +1,27 @@
 .profileContainer {
   width: 100%;
-  max-width: 900px;
-  margin: 40px auto;
+  max-width: 1100px;
+  margin: 60px auto;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 48px;
+  margin-bottom: 60px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 80px;
-  align-items: center;
+  gap: 120px;
+  align-items: flex-start;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
 }
 
 .inputGroup {
@@ -30,9 +30,9 @@
 }
 
 .inputGroup label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #6b7280;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .inputWrapper {
@@ -45,8 +45,8 @@
   width: 100%;
   border: none;
   background: transparent;
-  padding: 8px 0;
-  font-size: 1rem;
+  padding: 12px 0;
+  font-size: 1.125rem;
   font-family: 'Montserrat', sans-serif;
   outline: none;
 }
@@ -56,8 +56,9 @@
   border: none;
   cursor: pointer;
   color: #9ca3af;
-  padding: 4px;
+  padding: 8px;
 }
+
 .saveIcon {
   background: none;
   border: none;
@@ -65,14 +66,22 @@
   color: #00A337;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+}
+
+.passwordSection {
+  margin-top: -10px;
 }
 
 .changePasswordLink {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #6b7280;
   text-decoration: underline;
-  margin-top: 8px;
-  align-self: flex-start;
+  cursor: pointer;
+}
+
+.changePasswordLink:hover {
+  color: #374151;
 }
 
 .avatarSection {
@@ -84,20 +93,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   cursor: pointer;
-  padding: 24px;
+  padding: 32px;
   border-radius: 24px;
   background-color: #FFFFFF;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   text-align: center;
   color: #374151;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .avatarSection {
+    order: -1;
+  }
 }

@@ -25,7 +25,7 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -49,6 +49,14 @@ apiClient.interceptors.response.use(
         window.location.href = '/';
         return Promise.reject(refreshError);
       }
+    }
+
+    if (error.response?.data?.message) {
+      error.message = error.response.data.message;
+    } else if (error.request) {
+      error.message = 'Ошибка сети. Пожалуйста, проверьте ваше подключение к интернету.';
+    } else {
+      error.message = 'Произошла непредвиденная ошибка.';
     }
 
     return Promise.reject(error);

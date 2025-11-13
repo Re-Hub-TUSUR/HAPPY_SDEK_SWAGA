@@ -5,13 +5,12 @@ import styles from './Header.module.css';
 import { FiLogIn, FiUserPlus, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../Button/Button';
-
-type ActiveTab = 'Тесты' | 'Результаты' | 'Для настроения';
+import { NAVIGATION_TABS, type NavigationTab } from '../../constants/navigation';
 
 interface HeaderProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
-  activeTab?: ActiveTab;
+  activeTab?: NavigationTab;
   isTransparent?: boolean;
 }
 
@@ -19,8 +18,8 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
   const { isAuthenticated, isLoading, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const avatarUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${user?.avatar_url || 'default_avatar.png'}`;
 
+  const avatarUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${user?.avatar_url || 'default_avatar.png'}`;
   const headerClasses = `${styles.header} ${isTransparent ? styles.transparent : ''}`;
 
   return (
@@ -30,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
         <>
           <div className={styles.desktopNav}>
             <div className={styles.navTabs}>
-              {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
+              {NAVIGATION_TABS.map((link) => (
                 <Link
                   key={link}
                   to={`/dashboard?tab=${link}`}
@@ -62,6 +61,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
                 <div>
                   <div className={styles.mobileMenuHeader}>
                     <Link to="/profile" className={styles.profileLink} onClick={() => setIsMobileMenuOpen(false)}>
+                      <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
                       <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
                     </Link>
                     <button onClick={() => setIsMobileMenuOpen(false)}>
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
                     </button>
                   </div>
                   <div className={styles.mobileMenuLinks}>
-                    {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
+                    {NAVIGATION_TABS.map((link) => (
                       <Link
                         key={link}
                         to={`/dashboard?tab=${link}`}

@@ -23,8 +23,12 @@ const TestCard: React.FC<TestCardProps> = ({ title, description, imageUrl, isPsy
         }}/>
       </div>
       <div className={styles.cardContent}>
-        <h3 className={styles.title}>{title}</h3>
-        <p className={styles.description}>{description}</p>
+        <h3 className={styles.title} title={title}>
+          {title}
+        </h3>
+        <p className={styles.description} title={description}>
+          {description}
+        </p>
       </div>
       
       {isPsychologist ? (

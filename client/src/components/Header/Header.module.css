@@ -83,15 +83,15 @@
   gap: 12px;
 }
 
+.profileLink:hover .userName {
+  color: #00A337;
+}
+
 .headerAvatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.profileLink:hover .userName {
-  color: #00A337;
 }
 
 .userName {

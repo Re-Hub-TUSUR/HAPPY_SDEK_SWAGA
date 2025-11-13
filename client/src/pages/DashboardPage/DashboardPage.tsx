@@ -5,15 +5,15 @@ import Tests from '../../components/Dashboard/views/Tests';
 import Results from '../../components/Dashboard/views/Results';
 import Mood from '../../components/Dashboard/views/Mood';
 import styles from './DashboardPage.module.css';
-
-export type ActiveTab = 'Тесты' | 'Результаты' | 'Для настроения';
-const TABS: ActiveTab[] = ['Тесты', 'Результаты', 'Для настроения'];
+import { NAVIGATION_TABS, DEFAULT_TAB, type NavigationTab } from '../../constants/navigation';
 
 const DashboardPage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const currentTab = searchParams.get('tab');
-  const activeTab: ActiveTab = TABS.includes(currentTab as ActiveTab) ? (currentTab as ActiveTab) : 'Результаты';
+  const activeTab: NavigationTab = NAVIGATION_TABS.includes(currentTab as NavigationTab) 
+    ? (currentTab as NavigationTab) 
+    : DEFAULT_TAB;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} pageWithGradients`}>
       <Header 
         activeTab={activeTab} 
         onLoginClick={() => {}} 

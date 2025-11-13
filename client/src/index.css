@@ -3,5 +3,55 @@ body {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FFFFFF;
+  background-color: #F5F7FA;
+}
+
+.pageWithGradients {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.pageWithGradients::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  background-color: #00A337;
+  opacity: 0.15;
+  filter: blur(150px);
+  z-index: -1;
+}
+
+.pageWithGradients::after {
+  content: '';
+  position: absolute;
+  bottom: -25%;
+  right: -25%;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background-color: #00A337;
+  opacity: 0.15;
+  filter: blur(150px);
+  z-index: -1;
+}
+
+@media (max-width: 900px) {
+  .pageWithGradients::before {
+    width: 80vw;
+    height: 80vw;
+    top: -30%;
+    left: -40%;
+  }
+
+  .pageWithGradients::after {
+    width: 90vw;
+    height: 90vw;
+    bottom: -40%;
+    right: -70%;
+  }
 }

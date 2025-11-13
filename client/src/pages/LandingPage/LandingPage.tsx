@@ -10,7 +10,7 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onRegisterClick }) => {
   return (
-    <div className={styles.landingPageContainer}>
+    <div className={`${styles.landingPageContainer} pageWithGradients`}>
       <Header 
         onLoginClick={onLoginClick} 
         onRegisterClick={onRegisterClick} 

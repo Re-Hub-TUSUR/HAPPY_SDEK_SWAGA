@@ -4,11 +4,12 @@ import CreateTestModal from '../../Test/CreateTestModal';
 import EditTestModal from '../../Test/EditTestModal';
 import TakeTestModal from '../../Test/TakeTestModal';
 import ConfirmModal from '../../ConfirmModal/ConfirmModal';
+import EmptyState from '../../EmptyState/EmptyState';
 import { useAuth } from '../../../contexts/AuthContext';
 import { testApi } from '../../../services/testService';
 import { useToast } from '../../../contexts/ToastContext';
 import styles from './Tests.module.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiInbox } from 'react-icons/fi';
 
 interface Test {
   id: number;
@@ -66,37 +67,36 @@ const Tests: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.grid}>
-        {tests.map(test => (
-          <TestCard 
-            key={test.id}
-            title={test.title}
-            description={test.description}
-            imageUrl={test.image_url}
-            isPsychologist={isPsychologist}
-            onTakeTest={() => setViewingTestId(test.id)}
-            onEdit={() => setEditingTestId(test.id)}
-            onDelete={() => setDeletingTest(test)}
-          />
-        ))}
-      </div>
+      {tests.length === 0 ? (
+        <EmptyState 
+          Icon={FiInbox}
+          title="Тесты еще не добавлены"
+          message="Как только психологи добавят новые тесты для прохождения, они появятся здесь."
+        />
+      ) : (
+        <div className={styles.grid}>
+          {tests.map(test => (
+            <TestCard 
+              key={test.id}
+              title={test.title}
+              description={test.description}
+              imageUrl={test.image_url}
+              isPsychologist={isPsychologist}
+              onTakeTest={() => setViewingTestId(test.id)}
+              onEdit={() => setEditingTestId(test.id)}
+              onDelete={() => setDeletingTest(test)}
+            />
+          ))}
+        </div>
+      )}
 
       {isPsychologist && (
         <button className={styles.fab} onClick={() => setIsCreateModalOpen(true)}>
           {FiPlus({ size: 28 })}
         </button>
       )}
-      
-      {deletingTest && (
-        <ConfirmModal 
-          title="Подтвердите удаление"
-          message={`Вы уверены, что хотите удалить тест "${deletingTest.title}"? Это действие необратимо.`}
-          onConfirm={handleDeleteTest}
-          onCancel={() => setDeletingTest(null)}
-          confirmText="Удалить"
-        />
-      )}
 
+      {deletingTest && ( <ConfirmModal title="Подтвердите удаление" message={<>Вы уверены, что хотите удалить тест <br /> <strong>"{deletingTest.title}"</strong>? <br /> Это действие необратимо.</>} onConfirm={handleDeleteTest} onCancel={() => setDeletingTest(null)} confirmText="Удалить" /> )}
       {isCreateModalOpen && ( <CreateTestModal onClose={() => setIsCreateModalOpen(false)} onTestCreated={fetchTests} /> )}
       {editingTestId && ( <EditTestModal testId={editingTestId} onClose={() => setEditingTestId(null)} onTestUpdated={fetchTests} /> )}
       {viewingTestId && ( <TakeTestModal testId={viewingTestId} onClose={() => setViewingTestId(null)} /> )}

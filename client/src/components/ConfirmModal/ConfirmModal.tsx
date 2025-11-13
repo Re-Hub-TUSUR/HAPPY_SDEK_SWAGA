@@ -4,14 +4,14 @@ import { FiAlertTriangle } from 'react-icons/fi';
 
 interface ConfirmModalProps {
   title: string;
-  message: string;
+  message: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
   confirmText?: string;
   cancelText?: string;
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, onCancel, confirmText = 'OK', cancelText = 'Отмена' }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, onCancel, confirmText = 'Удалить', cancelText = 'Отмена' }) => {
   return (
     <div className={styles.backdrop} onClick={onCancel}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
