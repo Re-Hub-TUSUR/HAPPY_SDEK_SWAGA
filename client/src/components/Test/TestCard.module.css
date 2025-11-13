@@ -1,0 +1,99 @@
+.card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.imageContainer {
+  height: 150px;
+  background-color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  color: #a0aec0;
+}
+
+.cardContent {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #00A337;
+  margin: 0 0 8px 0;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ctaButton {
+  padding: 16px 20px;
+  border: none;
+  border-top: 1px solid #f0f2f5;
+  background-color: #FFFFFF;
+  color: #00A337;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ctaButton:hover {
+  background-color: #f5f7fa;
+}
+
+.psychologistActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #f0f2f5;
+}
+
+.psychologistActions button {
+  padding: 14px 10px;
+  background-color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.psychologistActions button:not(:last-child) {
+  border-right: 1px solid #f0f2f5;
+}
+
+.psychologistActions button:hover {
+  background-color: #f5f7fa;
+}
+
+.psychologistActions .deleteAction {
+  color: #ef4444;
+}

@@ -1,0 +1,14 @@
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #F5F7FA;
+}
+
+.contentWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+}

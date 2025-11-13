@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #f5f7fa;
+  color: #374151;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.mascotImage {
+  width: 150px;
+  height: auto;
+  margin-bottom: 24px;
+}
+
+.container h1 {
+  font-size: 6rem;
+  font-weight: 600;
+  color: #00A337;
+  margin: 0;
+  line-height: 1;
+}
+
+.container h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.container p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  max-width: 400px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.homeLink {
+  text-decoration: none;
+}

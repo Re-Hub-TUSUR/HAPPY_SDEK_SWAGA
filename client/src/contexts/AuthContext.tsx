@@ -5,6 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  role: string;
 }
 
 interface AuthContextType {
@@ -13,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
+  updateUser: (newUserData: User) => void; 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -56,8 +58,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await loadUser();
   }, [loadUser]);
 
+  const updateUser = useCallback((newUserData: User) => {
+    setUser(newUserData);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

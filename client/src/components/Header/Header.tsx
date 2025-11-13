@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import cdekLogo from '../../assets/CDEK_logo.png';
 import styles from './Header.module.css';
 import { FiLogIn, FiUserPlus, FiMenu, FiX } from 'react-icons/fi';
@@ -11,18 +12,13 @@ interface HeaderProps {
   onLoginClick: () => void;
   onRegisterClick: () => void;
   activeTab?: ActiveTab;
-  onTabClick?: (tab: ActiveTab) => void;
   isTransparent?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTab, onTabClick, isTransparent }) => {
+const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTab, isTransparent }) => {
   const { isAuthenticated, isLoading, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleTabClick = (tab: ActiveTab) => {
-    onTabClick?.(tab);
-    setIsMobileMenuOpen(false);
-  };
+  const location = useLocation();
 
   const headerClasses = `${styles.header} ${isTransparent ? styles.transparent : ''}`;
 
@@ -34,17 +30,19 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
           <div className={styles.desktopNav}>
             <div className={styles.navTabs}>
               {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
-                <button
+                <Link
                   key={link}
-                  className={`${styles.navLink} ${activeTab === link ? styles.active : ''}`}
-                  onClick={() => handleTabClick(link as ActiveTab)}
+                  to={`/dashboard?tab=${link}`}
+                  className={`${styles.navLink} ${location.pathname === '/dashboard' && activeTab === link ? styles.active : ''}`}
                 >
                   {link}
-                </button>
+                </Link>
               ))}
             </div>
             <div className={styles.userInfo}>
-              <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+              <Link to="/profile" className={styles.profileLink}>
+                <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+              </Link>
               <button onClick={logout} className={styles.logoutButton}>Выйти</button>
             </div>
           </div>
@@ -61,20 +59,23 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
               <div className={styles.mobileMenu}>
                 <div>
                   <div className={styles.mobileMenuHeader}>
-                    <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+                    <Link to="/profile" className={styles.profileLink} onClick={() => setIsMobileMenuOpen(false)}>
+                      <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+                    </Link>
                     <button onClick={() => setIsMobileMenuOpen(false)}>
                       {FiX({ size: 28, color: '#374151' })}
                     </button>
                   </div>
                   <div className={styles.mobileMenuLinks}>
                     {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
-                      <button
+                      <Link
                         key={link}
+                        to={`/dashboard?tab=${link}`}
                         className={`${styles.mobileNavLink} ${activeTab === link ? styles.active : ''}`}
-                        onClick={() => handleTabClick(link as ActiveTab)}
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {link}
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 </div>

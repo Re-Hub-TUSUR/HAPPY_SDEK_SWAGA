@@ -54,6 +54,7 @@
   border: none;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
+  text-decoration: none; /* Убираем подчеркивание */
 }
 
 .navLink:hover {
@@ -73,9 +74,20 @@
   flex-shrink: 0;
 }
 
+.profileLink {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease-in-out;
+}
+
+.profileLink:hover .userName {
+  color: #00A337;
+}
+
 .userName {
   color: #374151;
   font-weight: 600;
+  transition: color 0.2s ease-in-out;
 }
 
 .logoutButton {
@@ -173,6 +185,7 @@
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
+  text-decoration: none; /* Убираем подчеркивание */
 }
 
 .mobileNavLink.active {

@@ -19,11 +19,14 @@ export const authApi = {
     return data;
   },
   
+  updateProfile: async (userData: { name: string }) => {
+    const { data } = await apiClient.put('/profile', userData);
+    return data;
+  },
+  
   refresh: async (refreshToken: string) => {
     return axios.post(`${API_BASE_URL}/auth/refresh`, {}, {
-      headers: {
-        'Authorization': `Bearer ${refreshToken}`
-      }
+      headers: { 'Authorization': `Bearer ${refreshToken}` }
     });
   },
 };

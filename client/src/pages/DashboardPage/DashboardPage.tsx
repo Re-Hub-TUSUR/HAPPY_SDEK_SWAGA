@@ -1,23 +1,19 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header/Header';
-import Tests from '../../components/Dashboard/Tests';
-import Results from '../../components/Dashboard/Results';
-import Mood from '../../components/Dashboard/Mood';
+import Tests from '../../components/Dashboard/views/Tests';
+import Results from '../../components/Dashboard/views/Results';
+import Mood from '../../components/Dashboard/views/Mood';
 import styles from './DashboardPage.module.css';
 
 export type ActiveTab = 'Тесты' | 'Результаты' | 'Для настроения';
 const TABS: ActiveTab[] = ['Тесты', 'Результаты', 'Для настроения'];
 
 const DashboardPage: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const currentTab = searchParams.get('tab');
   const activeTab: ActiveTab = TABS.includes(currentTab as ActiveTab) ? (currentTab as ActiveTab) : 'Результаты';
-
-  const handleTabClick = (tab: ActiveTab) => {
-    setSearchParams({ tab: tab });
-  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -36,7 +32,6 @@ const DashboardPage: React.FC = () => {
     <div className={styles.pageContainer}>
       <Header 
         activeTab={activeTab} 
-        onTabClick={handleTabClick}
         onLoginClick={() => {}} 
         onRegisterClick={() => {}} 
       />

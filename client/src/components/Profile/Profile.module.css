@@ -1,0 +1,110 @@
+.profileContainer {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.card {
+  background-color: #FFFFFF;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.inputGroup input {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  font-size: 1rem;
+  color: #111827;
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+}
+
+.inputGroup input.editable {
+  background-color: #FFFFFF;
+  border-color: #00A337;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnEdit {
+  background-color: #374151;
+  color: #FFFFFF;
+}
+.btnEdit:hover {
+  background-color: #1f2937;
+}
+
+.btnSave {
+  background-color: #00A337;
+  color: #FFFFFF;
+}
+.btnSave:hover {
+  opacity: 0.9;
+}
+
+.btnCancel {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.btnCancel:hover {
+  background-color: #e5e7eb;
+}
