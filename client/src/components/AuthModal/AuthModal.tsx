@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './AuthModal.module.css';
 import { FiX } from 'react-icons/fi';
 import { useToast } from '../../contexts/ToastContext';
-import { authApi } from '../../services/api';
+import { authApi } from '../../services/authService'; 
 import { useAuth } from '../../contexts/AuthContext';
 
 interface AuthModalProps {

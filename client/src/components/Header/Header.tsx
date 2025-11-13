@@ -12,9 +12,10 @@ interface HeaderProps {
   onRegisterClick: () => void;
   activeTab?: ActiveTab;
   onTabClick?: (tab: ActiveTab) => void;
+  isTransparent?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTab, onTabClick }) => {
+const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTab, onTabClick, isTransparent }) => {
   const { isAuthenticated, isLoading, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -23,81 +24,71 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
     setIsMobileMenuOpen(false);
   };
 
-  const renderGuestHeader = () => (
-    <nav className={styles.navigation}>
-      <Button variant="primary" Icon={FiLogIn as any} onClick={onLoginClick}>
-        Войти
-      </Button>
-      <Button variant="secondary" Icon={FiUserPlus as any} onClick={onRegisterClick}>
-        Зарегистрироваться
-      </Button>
-    </nav>
-  );
-
-  const renderUserHeader = () => (
-    <>
-      <div className={styles.desktopNav}>
-        <div className={styles.navTabs}>
-          {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
-            <button
-              key={link}
-              className={`${styles.navLink} ${activeTab === link ? styles.active : ''}`}
-              onClick={() => handleTabClick(link as ActiveTab)}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-        <div className={styles.userInfo}>
-          <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
-          <button onClick={logout} className={styles.logoutButton}>
-            Выйти
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.mobileNav}>
-        <button className={styles.hamburgerButton} onClick={() => setIsMobileMenuOpen(true)}>
-          {FiMenu({ size: 28, color: '#374151' })}
-        </button>
-      </div>
-
-      {isMobileMenuOpen && (
-        <>
-          <div className={styles.backdrop} onClick={() => setIsMobileMenuOpen(false)}></div>
-          <div className={styles.mobileMenu}>
-            <div>
-              <div className={styles.mobileMenuHeader}>
-                <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
-                <button onClick={() => setIsMobileMenuOpen(false)}>
-                  {FiX({ size: 28, color: '#374151' })}
-                </button>
-              </div>
-              <div className={styles.mobileMenuLinks}>
-                {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
-                  <button
-                    key={link}
-                    className={`${styles.mobileNavLink} ${activeTab === link ? styles.active : ''}`}
-                    onClick={() => handleTabClick(link as ActiveTab)}
-                  >
-                    {link}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <button onClick={logout} className={styles.mobileLogoutButton}>
-              Выйти
-            </button>
-          </div>
-        </>
-      )}
-    </>
-  );
+  const headerClasses = `${styles.header} ${isTransparent ? styles.transparent : ''}`;
 
   return (
-    <header className={styles.header}>
+    <header className={headerClasses}>
       <img src={cdekLogo} alt="Логотип СДЭК" className={styles.logo} />
-      {isLoading ? null : isAuthenticated ? renderUserHeader() : renderGuestHeader()}
+      {isLoading ? null : isAuthenticated ? (
+        <>
+          <div className={styles.desktopNav}>
+            <div className={styles.navTabs}>
+              {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
+                <button
+                  key={link}
+                  className={`${styles.navLink} ${activeTab === link ? styles.active : ''}`}
+                  onClick={() => handleTabClick(link as ActiveTab)}
+                >
+                  {link}
+                </button>
+              ))}
+            </div>
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+              <button onClick={logout} className={styles.logoutButton}>Выйти</button>
+            </div>
+          </div>
+
+          <div className={styles.mobileNav}>
+            <button className={styles.hamburgerButton} onClick={() => setIsMobileMenuOpen(true)}>
+              {FiMenu({ size: 28, color: '#374151' })}
+            </button>
+          </div>
+
+          {isMobileMenuOpen && (
+            <>
+              <div className={styles.backdrop} onClick={() => setIsMobileMenuOpen(false)}></div>
+              <div className={styles.mobileMenu}>
+                <div>
+                  <div className={styles.mobileMenuHeader}>
+                    <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+                    <button onClick={() => setIsMobileMenuOpen(false)}>
+                      {FiX({ size: 28, color: '#374151' })}
+                    </button>
+                  </div>
+                  <div className={styles.mobileMenuLinks}>
+                    {['Тесты', 'Результаты', 'Для настроения'].map((link) => (
+                      <button
+                        key={link}
+                        className={`${styles.mobileNavLink} ${activeTab === link ? styles.active : ''}`}
+                        onClick={() => handleTabClick(link as ActiveTab)}
+                      >
+                        {link}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button onClick={logout} className={styles.mobileLogoutButton}>Выйти</button>
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <nav className={styles.navigation}>
+          <Button variant="primary" Icon={FiLogIn as any} onClick={onLoginClick}>Войти</Button>
+          <Button variant="secondary" Icon={FiUserPlus as any} onClick={onRegisterClick}>Зарегистрироваться</Button>
+        </nav>
+      )}
     </header>
   );
 };

@@ -11,8 +11,12 @@ interface LandingPageProps {
 const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onRegisterClick }) => {
   return (
     <div className={styles.landingPageContainer}>
+      <Header 
+        onLoginClick={onLoginClick} 
+        onRegisterClick={onRegisterClick} 
+        isTransparent 
+      />
       <div className={styles.contentWrapper}>
-        <Header onLoginClick={onLoginClick} onRegisterClick={onRegisterClick} />
         <Hero />
       </div>
     </div>

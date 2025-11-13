@@ -1,12 +1,22 @@
+# Переменные окружения
 .env
+client/.env
 
+# Зависимости
 client/node_modules
+
+# Артефакты сборки
 client/build
 
+# Виртуальное окружение Python
 server/venv
-server/__pycache__
-server/*.pyc
 
+# Скомпилированные файлы и кеш Python
+__pycache__/
+*.pyc
+
+# Файлы IDE
 .vscode/
 
+# Системные файлы macOS
 .DS_Store

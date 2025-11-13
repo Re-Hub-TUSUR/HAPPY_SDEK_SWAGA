@@ -9,9 +9,25 @@
   z-index: 10;
 }
 
+.header.transparent {
+  background-color: transparent;
+  border-bottom: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .logo {
   height: 32px;
   flex-shrink: 0;
+}
+
+.navigation {
+  display: flex;
+  gap: 16px;
+  align-items: center;
 }
 
 .desktopNav {
@@ -188,5 +204,10 @@
   }
   .mobileNav {
     display: block;
+  }
+  .header.transparent .navigation {
+    position: absolute;
+    right: 20px;
+    top: 12px;
   }
 }
