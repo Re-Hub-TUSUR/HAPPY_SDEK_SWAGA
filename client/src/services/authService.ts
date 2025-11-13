@@ -19,14 +19,26 @@ export const authApi = {
     return data;
   },
   
-  updateProfile: async (userData: { name: string }) => {
+  updateProfile: async (userData: { name?: string; email?: string }) => {
     const { data } = await apiClient.put('/profile', userData);
     return data;
   },
   
+  uploadAvatar: async (formData: FormData) => {
+    const { data } = await apiClient.post('/profile/avatar', formData);
+    return data;
+  },
+
+  changePassword: async (passwords: any) => {
+    const { data } = await apiClient.put('/profile/password', passwords);
+    return data;
+  },
+
   refresh: async (refreshToken: string) => {
     return axios.post(`${API_BASE_URL}/auth/refresh`, {}, {
-      headers: { 'Authorization': `Bearer ${refreshToken}` }
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`
+      }
     });
   },
 };

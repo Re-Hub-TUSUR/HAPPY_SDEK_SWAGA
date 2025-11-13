@@ -19,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
   const { isAuthenticated, isLoading, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const avatarUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${user?.avatar_url || 'default_avatar.png'}`;
 
   const headerClasses = `${styles.header} ${isTransparent ? styles.transparent : ''}`;
 
@@ -41,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
             </div>
             <div className={styles.userInfo}>
               <Link to="/profile" className={styles.profileLink}>
+                <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
                 <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
               </Link>
               <button onClick={logout} className={styles.logoutButton}>Выйти</button>
