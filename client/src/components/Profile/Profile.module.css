@@ -58,7 +58,6 @@
   color: #9ca3af;
   padding: 8px;
 }
-
 .saveIcon {
   background: none;
   border: none;
@@ -112,6 +111,7 @@
   object-fit: cover;
 }
 
+/* Адаптивность */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -120,5 +120,15 @@
   
   .avatarSection {
     order: -1;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+
+  .passwordSection {
+    text-align: center;
   }
 }
