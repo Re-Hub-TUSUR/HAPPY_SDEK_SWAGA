@@ -54,7 +54,7 @@
   border: none;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
-  text-decoration: none; /* Убираем подчеркивание */
+  text-decoration: none;
 }
 
 .navLink:hover {
@@ -195,7 +195,7 @@
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
-  text-decoration: none; /* Убираем подчеркивание */
+  text-decoration: none;
 }
 
 .mobileNavLink.active {

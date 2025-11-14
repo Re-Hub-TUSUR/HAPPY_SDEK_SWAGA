@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import TestCard from '../../Test/TestCard';
-import CreateTestModal from '../../Test/CreateTestModal';
-import EditTestModal from '../../Test/EditTestModal';
-import TakeTestModal from '../../Test/TakeTestModal';
 import ConfirmModal from '../../ConfirmModal/ConfirmModal';
 import EmptyState from '../../EmptyState/EmptyState';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -21,14 +19,10 @@ interface Test {
 const Tests: React.FC = () => {
   const { user } = useAuth();
   const { addToast } = useToast();
+  const navigate = useNavigate();
   const [tests, setTests] = useState<Test[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [viewingTestId, setViewingTestId] = useState<number | null>(null);
-  const [editingTestId, setEditingTestId] = useState<number | null>(null);
   const [deletingTest, setDeletingTest] = useState<Test | null>(null);
-
   const isPsychologist = user?.role === 'psychologist';
 
   const fetchTests = useCallback(async () => {
@@ -78,12 +72,12 @@ const Tests: React.FC = () => {
           {tests.map(test => (
             <TestCard 
               key={test.id}
+              testId={test.id}
               title={test.title}
               description={test.description}
               imageUrl={test.image_url}
               isPsychologist={isPsychologist}
-              onTakeTest={() => setViewingTestId(test.id)}
-              onEdit={() => setEditingTestId(test.id)}
+              onTakeTest={() => navigate(`/test/${test.id}`)}
               onDelete={() => setDeletingTest(test)}
             />
           ))}
@@ -91,15 +85,12 @@ const Tests: React.FC = () => {
       )}
 
       {isPsychologist && (
-        <button className={styles.fab} onClick={() => setIsCreateModalOpen(true)}>
+        <Link to="/tests/new" className={styles.fab}>
           {FiPlus({ size: 28 })}
-        </button>
+        </Link>
       )}
 
       {deletingTest && ( <ConfirmModal title="Подтвердите удаление" message={<>Вы уверены, что хотите удалить тест <br /> <strong>"{deletingTest.title}"</strong>? <br /> Это действие необратимо.</>} onConfirm={handleDeleteTest} onCancel={() => setDeletingTest(null)} confirmText="Удалить" /> )}
-      {isCreateModalOpen && ( <CreateTestModal onClose={() => setIsCreateModalOpen(false)} onTestCreated={fetchTests} /> )}
-      {editingTestId && ( <EditTestModal testId={editingTestId} onClose={() => setEditingTestId(null)} onTestUpdated={fetchTests} /> )}
-      {viewingTestId && ( <TakeTestModal testId={viewingTestId} onClose={() => setViewingTestId(null)} /> )}
     </div>
   );
 };

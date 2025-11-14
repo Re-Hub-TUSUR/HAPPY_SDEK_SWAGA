@@ -1,0 +1,98 @@
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.testWrapper {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exitButton {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #4b5563;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.progressBar {
+  width: 100px;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #00A337;
+  transition: width 0.3s ease-in-out;
+}
+
+.questionTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.navigation {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.navButton {
+  flex: 1;
+  max-width: 200px;
+  padding: 12px 24px; 
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #FFFFFF;
+  color: #374151;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.navButton:hover {
+  background-color: #f9fafb;
+}
+
+.navButton.cta {
+  background-color: #00A337;
+  color: #FFFFFF;
+  border-color: #00A337;
+}

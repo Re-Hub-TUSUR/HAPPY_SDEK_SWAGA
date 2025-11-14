@@ -4,6 +4,8 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import TestBuilderPage from './pages/TestBuilderPage/TestBuilderPage';
+import TestTakingPage from './pages/TestTakingPage/TestTakingPage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import AuthModal from './components/AuthModal/AuthModal';
 import { useAuth } from './contexts/AuthContext';
@@ -42,7 +44,6 @@ const Home = () => {
   );
 };
 
-
 function App() {
   return (
     <Routes>
@@ -50,6 +51,9 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/tests/new" element={<TestBuilderPage />} />
+        <Route path="/tests/edit/:testId" element={<TestBuilderPage />} />
+        <Route path="/test/:testId" element={<TestTakingPage />} /> {/* --- НОВЫЙ РОУТ --- */}
       </Route>
       <Route path="*" element={<NotFoundPage />} /> 
     </Routes>

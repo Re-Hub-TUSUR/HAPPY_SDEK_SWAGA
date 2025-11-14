@@ -83,7 +83,7 @@
   border-top: 1px solid #f0f2f5;
 }
 
-.psychologistActions button {
+.psychologistActions button, .actionLink {
   flex: 1;
   padding: 14px 10px;
   background-color: #FFFFFF;
@@ -98,13 +98,14 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  text-decoration: none;
 }
 
-.psychologistActions button:not(:first-child) {
+.psychologistActions button:not(:first-child), .actionLink {
   border-left: 1px solid #f0f2f5;
 }
 
-.psychologistActions button:hover {
+.psychologistActions button:hover, .actionLink:hover {
   background-color: #f5f7fa;
 }
 
@@ -112,11 +113,11 @@
   color: #ef4444;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 768px) {
   .psychologistActions {
     flex-direction: column;
   }
-  .psychologistActions button:not(:first-child) {
+  .psychologistActions button:not(:first-child), .actionLink {
     border-left: none;
     border-top: 1px solid #f0f2f5;
   }

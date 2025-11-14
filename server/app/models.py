@@ -24,6 +24,7 @@ class Test(db.Model):
     description = db.Column(db.Text, nullable=True)
     type = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(255), nullable=True, default='default_test_image.png')
+    is_anonymous = db.Column(db.Boolean, default=False, nullable=False)
     questions = db.relationship('Question', backref='test', lazy=True, cascade="all, delete-orphan")
     test_results = db.relationship('TestResult', backref='test', lazy=True, cascade="all, delete-orphan")
 
@@ -31,13 +32,18 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'), nullable=False)
+    order = db.Column(db.Integer, nullable=False, default=0)
+    question_type = db.Column(db.String(50), nullable=False, default='scale')
+    config = db.Column(db.JSON, nullable=True)
+    canonical_id = db.Column(db.Integer, nullable=True)
 
 class TestResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    scores = db.Column(db.JSON, nullable=False)
-    interpretation = db.Column(db.JSON, nullable=False)
+    scores = db.Column(db.JSON, nullable=True)
+    interpretation = db.Column(db.JSON, nullable=True)
     recommendations = db.Column(db.Text, nullable=True)
+    answers = db.Column(db.JSON, nullable=False)
     user = db.relationship('User', backref='test_results')

@@ -5,20 +5,26 @@ from gigachat import GigaChat
 logger = logging.getLogger(__name__)
 
 giga = None
-#if os.environ.get('GIGACHAT', ''):
-try:
-    giga = GigaChat(
-        credentials="OWRlNjRhNDMtZGQ3OC00NmQyLWI2NTAtOWEyYTU0Mzk0MGQ1OjkwYmIwMDMzLWUyNTUtNGIwMS1iMjY5LThjZjcyZWQwNTZiNA==",
-        verify_ssl_certs=False,
-        model="GigaChat-Max"
-    )
-    logger.info("GigaChat клиент успешно инициализирован.")
-except Exception as e:
-    giga = None
-    logger.error(f"Не удалось инициализировать GigaChat: {e}")
-#else:
-    #logger.warning("GIGACHAT_CREDENTIALS не найден в .env. LLM-анализатор будет отключен.")
+GIGACHAT_CREDENTIALS = os.environ.get('GIGACHAT_CREDENTIALS')
+
+if GIGACHAT_CREDENTIALS:
+    try:
+        giga = GigaChat(
+            credentials=GIGACHAT_CREDENTIALS,
+            verify_ssl_certs=False,
+            model="GigaChat-Max"
+        )
+        logger.info("GigaChat клиент успешно инициализирован.")
+    except Exception as e:
+        giga = None
+        logger.error(f"Не удалось инициализировать GigaChat: {e}")
+else:
+    logger.warning("GIGACHAT_CREDENTIALS не найдена в переменных окружения. LLM-анализатор будет отключен.")
+
 def recomendation(test: dict, type: str):
+    if not giga:
+        return "AI-анализатор в данный момент недоступен. Попробуйте позже."
+
     if type == "CBI":
         prompt = (f"Тебе будут даны ответы на каждый вопрос, опираясь на эти ответы тебе нужно будет дать рекомендации человеку по его состоянию, как проф. психологу"
             f"Тебе будут даны результаты теста CBI с вопросами и шкалой оценок(ответов). "
@@ -103,4 +109,4 @@ def recomendation(test: dict, type: str):
 
     except Exception as e:
         logger.error(f"Ошибка при взаимодействии с GigaChat: {e}", exc_info=True)
-        return {}
+        return "К сожалению, не удалось получить рекомендации от AI-ассистента. Пожалуйста, попробуйте пройти тест позже."

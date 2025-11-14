@@ -79,7 +79,6 @@ const Profile: React.FC = () => {
         <h2 className={styles.title}>Личный кабинет</h2>
         <div className={styles.grid}>
           <div className={styles.form}>
-            {/* Поле Имя */}
             <div className={styles.inputGroup}>
               <label htmlFor="name">Имя</label>
               <div className={styles.inputWrapper}>
@@ -92,7 +91,6 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
-            {/* Поле Почта */}
             <div className={styles.inputGroup}>
               <label htmlFor="email">Почта</label>
               <div className={styles.inputWrapper}>
@@ -106,9 +104,13 @@ const Profile: React.FC = () => {
             </div>
             
             <div className={styles.passwordSection}>
-              <a href="#" onClick={(e) => { e.preventDefault(); setIsPasswordModalOpen(true); }} className={styles.changePasswordLink}>
+              <button 
+                type="button"
+                onClick={() => setIsPasswordModalOpen(true)} 
+                className={styles.changePasswordLink}
+              >
                 Хотите изменить пароль?
-              </a>
+              </button>
             </div>
           </div>
 

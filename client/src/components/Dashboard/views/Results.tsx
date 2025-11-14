@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import EmptyState from '../../EmptyState/EmptyState';
-import { testApi } from '../../../services/testService'; // Предполагаем, что сервис для результатов будет здесь
 import { useToast } from '../../../contexts/ToastContext';
 import styles from './Results.module.css';
 import { FiFileText } from 'react-icons/fi';
@@ -18,7 +17,6 @@ const Results: React.FC = () => {
     try {
       // const data = await resultApi.getAllResults();
       // setResults(data);
-      // Пока что используем пустой массив для демонстрации Empty State
       setResults([]);
     } catch (error) {
       addToast("Не удалось загрузить результаты", "error");
@@ -46,7 +44,6 @@ const Results: React.FC = () => {
       ) : (
         <div>
           <h2>Таблица с результатами</h2>
-          {/* Здесь будет реализация таблицы */}
         </div>
       )}
     </div>

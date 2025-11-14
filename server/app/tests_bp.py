@@ -9,6 +9,7 @@ from .models import User, Test, Question, TestResult
 from .extensions import db
 from .analysis.burnout_scores import score_cbi, interpret_cbi, score_olbi, interpret_olbi
 from .analysis.llm_analyzer import recomendation
+from .analysis.standard_tests import get_standard_questions
 
 tests_bp = Blueprint('tests', __name__)
 
@@ -31,7 +32,6 @@ def psychologist_required():
     return wrapper
 
 def delete_image_file(filename):
-    """Безопасно удаляет файл изображения, если это не файл по умолчанию."""
     if filename and filename != 'default_test_image.png':
         try:
             upload_folder = os.path.join(current_app.root_path, '..', 'static', 'uploads')
@@ -42,14 +42,45 @@ def delete_image_file(filename):
 @tests_bp.route('/', methods=['POST'])
 @psychologist_required()
 def create_test():
-    title = request.form.get('title')
-    description = request.form.get('description')
-    type = request.form.get('type')
-    questions_json = request.form.get('questions')
-    questions = json.loads(questions_json)
+    data = request.form
+    title = data.get('title')
+    description = data.get('description')
+    test_type = data.get('type')
+    is_anonymous = data.get('is_anonymous', 'false').lower() == 'true'
     
-    new_test = Test(title=title, description=description, type=type)
+    if not all([title, test_type]):
+        return jsonify(message="Не все обязательные поля (title, type) заполнены"), 400
 
+    new_test = Test(title=title, description=description, type=test_type, is_anonymous=is_anonymous)
+
+    standard_questions = get_standard_questions(test_type)
+    if standard_questions:
+        for i, q_data in enumerate(standard_questions):
+            new_question = Question(
+                text=q_data['text'],
+                question_type='scale',
+                order=i,
+                canonical_id=q_data['id'],
+                config={"min": 1, "max": 5, "min_label": "Никогда", "max_label": "Всегда"}
+            )
+            new_test.questions.append(new_question)
+    else:
+        questions_json = data.get('questions')
+        if not questions_json:
+            return jsonify(message="Для пользовательского теста необходимо предоставить вопросы"), 400
+        try:
+            questions_data = json.loads(questions_json)
+            for q_data in questions_data:
+                new_question = Question(
+                    text=q_data.get('text'),
+                    question_type=q_data.get('question_type'),
+                    order=q_data.get('order', 0),
+                    config=q_data.get('config', {})
+                )
+                new_test.questions.append(new_question)
+        except (json.JSONDecodeError, TypeError):
+            return jsonify(message="Неверный формат JSON для вопросов"), 400
+    
     if 'image' in request.files:
         file = request.files['image']
         if file and file.filename != '' and allowed_file(file.filename):
@@ -58,10 +89,7 @@ def create_test():
             os.makedirs(upload_folder, exist_ok=True)
             file.save(os.path.join(upload_folder, filename))
             new_test.image_url = filename
-    
-    for q_text in questions:
-        new_test.questions.append(Question(text=q_text))
-        
+
     db.session.add(new_test)
     db.session.commit()
     return jsonify({"message": "Тест успешно создан", "id": new_test.id}), 201
@@ -70,11 +98,29 @@ def create_test():
 @psychologist_required()
 def update_test(test_id):
     test = Test.query.get_or_404(test_id)
+    data = request.form
     
-    test.title = request.form.get('title', test.title)
-    test.description = request.form.get('description', test.description)
-    test.type = request.form.get('type', test.type)
+    test.title = data.get('title', test.title)
+    test.description = data.get('description', test.description)
+    test.is_anonymous = data.get('is_anonymous', str(test.is_anonymous)).lower() == 'true'
 
+    if test.type not in ['CBI', 'OLBI']:
+        questions_json = data.get('questions')
+        if questions_json:
+            try:
+                Question.query.filter_by(test_id=test.id).delete()
+                questions_data = json.loads(questions_json)
+                for q_data in questions_data:
+                    new_question = Question(
+                        text=q_data.get('text'),
+                        question_type=q_data.get('question_type'),
+                        order=q_data.get('order', 0),
+                        config=q_data.get('config', {})
+                    )
+                    test.questions.append(new_question)
+            except (json.JSONDecodeError, TypeError):
+                return jsonify(message="Неверный формат JSON для вопросов"), 400
+    
     if 'image' in request.files:
         file = request.files['image']
         if file and file.filename != '' and allowed_file(file.filename):
@@ -83,13 +129,6 @@ def update_test(test_id):
             upload_folder = os.path.join(current_app.root_path, '..', 'static', 'uploads')
             file.save(os.path.join(upload_folder, filename))
             test.image_url = filename
-    
-    questions_json = request.form.get('questions')
-    if questions_json:
-        Question.query.filter_by(test_id=test.id).delete()
-        new_questions = json.loads(questions_json)
-        for q_text in new_questions:
-            test.questions.append(Question(text=q_text))
             
     db.session.commit()
     return jsonify({"message": "Тест успешно обновлен"}), 200
@@ -113,11 +152,21 @@ def get_all_tests():
 @jwt_required()
 def get_test_details(test_id):
     test = Test.query.get_or_404(test_id)
+    questions = sorted(test.questions, key=lambda q: q.order)
     return jsonify({
         "id": test.id,
         "title": test.title,
         "description": test.description,
-        "questions": [{"id": q.id, "text": q.text} for q in test.questions]
+        "type": test.type,
+        "questions": [
+            {
+                "id": q.id, 
+                "text": q.text,
+                "order": q.order,
+                "question_type": q.question_type,
+                "config": q.config
+            } for q in questions
+        ]
     })
 
 @tests_bp.route('/<int:test_id>/submit', methods=['POST'])
@@ -126,27 +175,37 @@ def submit_test(test_id):
     current_user_id = get_jwt_identity()
     test = Test.query.get_or_404(test_id)
     data = request.get_json()
-    answers = data.get('answers')
+    answers_list = data.get('answers')
+    if not answers_list:
+        return jsonify(message="Ответы не предоставлены"), 400
 
-    questions_ordered = sorted(test.questions, key=lambda q: q.id)
-    formatted_answers = {str(i + 1): answers.get(str(q.id)) for i, q in enumerate(questions_ordered)}
+    answers_dict = {item['question_id']: item['answer'] for item in answers_list}
 
     scores, interp, recs = {}, {}, ""
     
-    if test.type == 'CBI':
-        scores = score_cbi(formatted_answers)
-        interp = interpret_cbi(scores)
-        recs = recomendation(formatted_answers, "CBI")
-    elif test.type == 'OLBI':
-        scores = score_olbi(formatted_answers)
-        interp = interpret_olbi(scores)
-        recs = recomendation(formatted_answers, "OLBI")
-    elif test.type == 'small':
-        recs = recomendation(answers, "small")
-    
+    if test.type in ['CBI', 'OLBI']:
+        formatted_answers = {}
+        for q in test.questions:
+            if q.canonical_id and q.id in answers_dict:
+                formatted_answers[str(q.canonical_id)] = answers_dict[q.id]
+        
+        if test.type == 'CBI':
+            scores = score_cbi(formatted_answers)
+            interp = interpret_cbi(scores)
+            recs = recomendation(formatted_answers, "CBI")
+        elif test.type == 'OLBI':
+            scores = score_olbi(formatted_answers)
+            interp = interpret_olbi(scores)
+            recs = recomendation(formatted_answers, "OLBI")
+    else:
+        questions_map = {q.id: q.text for q in test.questions}
+        prompt_data = {questions_map.get(qid): ans for qid, ans in answers_dict.items() if qid in questions_map}
+        recs = recomendation(prompt_data, "small")
+
     new_result = TestResult(
         user_id=current_user_id,
         test_id=test_id,
+        answers=answers_list,
         scores=scores,
         interpretation=interp,
         recommendations=recs
@@ -154,7 +213,23 @@ def submit_test(test_id):
     db.session.add(new_result)
     db.session.commit()
 
-    return jsonify({
-        "message": "Тест успешно пройден!",
-        "resultId": new_result.id
-    })
+    return jsonify({"message": "Тест успешно пройден!", "resultId": new_result.id})
+
+@tests_bp.route('/results', methods=['GET'])
+@jwt_required()
+def get_user_results():
+    user_id = get_jwt_identity()
+    results = TestResult.query.filter_by(user_id=user_id).order_by(TestResult.created_at.desc()).all()
+    
+    output = []
+    for result in results:
+        output.append({
+            'id': result.id,
+            'test_id': result.test.id,
+            'test_title': result.test.title,
+            'created_at': result.created_at.isoformat(),
+            'interpretation': result.interpretation,
+            'recommendations': result.recommendations,
+            'scores': result.scores
+        })
+    return jsonify(output)

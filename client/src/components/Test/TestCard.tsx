@@ -1,18 +1,19 @@
 import React from 'react';
 import styles from './TestCard.module.css';
 import { FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 interface TestCardProps {
+  testId: number;
   title: string;
   description: string;
   imageUrl: string | null;
   isPsychologist: boolean;
   onTakeTest: () => void;
-  onEdit: () => void;
   onDelete: () => void;
 }
 
-const TestCard: React.FC<TestCardProps> = ({ title, description, imageUrl, isPsychologist, onTakeTest, onEdit, onDelete }) => {
+const TestCard: React.FC<TestCardProps> = ({ testId, title, description, imageUrl, isPsychologist, onTakeTest, onDelete }) => {
   const fullImageUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${imageUrl || 'default_test_image.png'}`;
 
   return (
@@ -34,7 +35,9 @@ const TestCard: React.FC<TestCardProps> = ({ title, description, imageUrl, isPsy
       {isPsychologist ? (
         <div className={styles.psychologistActions}>
           <button onClick={onTakeTest}>{FiEye({})} Просмотреть</button>
-          <button onClick={onEdit}>{FiEdit({})} Редактировать</button>
+          <Link to={`/tests/edit/${testId}`} className={styles.actionLink}>
+            {FiEdit({})} Редактировать
+          </Link>
           <button onClick={onDelete} className={styles.deleteAction}>{FiTrash2({})} Удалить</button>
         </div>
       ) : (

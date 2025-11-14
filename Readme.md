@@ -40,6 +40,9 @@
 
     # Секретный ключ для подписи JWT-токенов
     JWT_SECRET_KEY=your_super_secret_and_long_jwt_key_here
+
+    # Учетные данные для GigaChat API
+    GIGACHAT_CREDENTIALS=ВАШ_ДЛИННЫЙ_КЛЮЧ_ОТ_GIGACHAT_СЮДА
     ```
 
     **B) В папке `client`** создайте файл `.env` для фронтенда:

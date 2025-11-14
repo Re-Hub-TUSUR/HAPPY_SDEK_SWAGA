@@ -1,3 +1,5 @@
+# docker-compose.yml
+
 services:
   db:
     image: postgres:15-alpine
@@ -25,6 +27,7 @@ services:
       FLASK_APP: run.py
       FLASK_DEBUG: 1
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      GIGACHAT_CREDENTIALS: ${GIGACHAT_CREDENTIALS}
     ports:
       - "5000:5000"
     volumes:
