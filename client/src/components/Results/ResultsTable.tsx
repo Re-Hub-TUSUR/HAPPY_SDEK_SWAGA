@@ -21,6 +21,17 @@ const ScoreDots: React.FC<{ score: number, max: number }> = ({ score, max }) => 
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, onRowClick }) => {
+  const getDisplayScore = (result: TestResult): number => {
+    if (result.scores && result.scores.overall !== undefined) {
+      return Math.round(result.scores.overall / 20);
+    }
+    if (result.scores && result.scores.exhaustion_pct !== undefined && result.scores.disengagement_pct !== undefined) {
+      const avgPct = (result.scores.exhaustion_pct + result.scores.disengagement_pct) / 2;
+      return Math.round(avgPct / 20);
+    }
+    return 0;
+  };
+
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
@@ -42,11 +53,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, onRowClick }) => {
               <td>{format(new Date(result.created_at), 'dd.MM.yyyy, HH:mm', { locale: ru })}</td>
               <td>{result.test_title}</td>
               <td>
-                <ScoreDots score={Math.round((result.scores.overall || 0) / 20)} max={5} />
+                <ScoreDots score={getDisplayScore(result)} max={5} />
               </td>
-              <td className={styles.recommendation} title={result.recommendations}>
-                {result.recommendations}
-              </td>
+              <td className={styles.recommendationCell}>Просмотреть</td>
             </tr>
           ))}
         </tbody>

@@ -29,4 +29,8 @@ export const testApi = {
     const { data } = await apiClient.get('/tests/results');
     return data;
   },
+  getSummaryRecommendation: async () => {
+    const { data } = await apiClient.get('/tests/summary-recommendation');
+    return data;
+  },
 };

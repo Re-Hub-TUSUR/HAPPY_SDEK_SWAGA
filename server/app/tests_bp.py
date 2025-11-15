@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from .models import User, Test, Question, TestResult
 from .extensions import db
 from .analysis.burnout_scores import score_cbi, interpret_cbi, score_olbi, interpret_olbi
-from .analysis.llm_analyzer import recomendation
+from .analysis.llm_analyzer import recomendation, summary_recommendation
 from .analysis.standard_tests import get_standard_questions
 
 tests_bp = Blueprint('tests', __name__)
@@ -246,6 +246,7 @@ def delete_test(test_id):
 @jwt_required()
 def submit_test(test_id):
     current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
     test = Test.query.get_or_404(test_id)
     data = request.get_json()
     answers_list = data.get('answers')
@@ -256,6 +257,15 @@ def submit_test(test_id):
 
     scores, interp, recs = {}, {}, ""
     
+    user_profile = {
+        "position": user.position,
+        "experience": user.experience,
+        "age": user.age,
+        "is_manager": user.is_manager,
+        "city": user.city,
+        "additional_info": user.additional_info
+    }
+
     if test.type in ['CBI', 'OLBI']:
         formatted_answers = {}
         for q in test.questions:
@@ -265,16 +275,16 @@ def submit_test(test_id):
         if test.type == 'CBI':
             scores = score_cbi(formatted_answers)
             interp = interpret_cbi(scores)
-            recs = recomendation(formatted_answers, "CBI")
+            recs = recomendation(formatted_answers, "CBI", user_profile)
         elif test.type == 'OLBI':
             scores = score_olbi(formatted_answers)
             interp = interpret_olbi(scores)
-            recs = recomendation(formatted_answers, "OLBI")
+            recs = recomendation(formatted_answers, "OLBI", user_profile)
     
     else:
         questions_map = {q.id: q.text for q in test.questions}
         prompt_data = {questions_map.get(qid): ans for qid, ans in answers_dict.items() if qid in questions_map}
-        recs = recomendation(prompt_data, "small")
+        recs = recomendation(prompt_data, "small", user_profile)
 
     new_result = TestResult(
         user_id=current_user_id,
@@ -285,6 +295,35 @@ def submit_test(test_id):
         recommendations=recs
     )
     db.session.add(new_result)
+    
+    try:
+        db.session.flush()
+
+        latest_results = TestResult.query.filter_by(user_id=current_user_id)\
+            .order_by(TestResult.created_at.desc()).limit(5).all()
+
+        history_summary = ""
+        for res in reversed(latest_results):
+            date_str = res.created_at.strftime('%d.%m.%Y')
+            score_str = ""
+            if res.scores and 'overall' in res.scores:
+                score_str = f"Общий балл: {res.scores['overall']}/100."
+            elif res.interpretation:
+                score_str = ", ".join([f"{k.replace('_level', '')}: {v}" for k, v in res.interpretation.items() if k != 'note'])
+            history_summary += f"- {date_str} ({res.test.title}): {score_str}\n"
+        
+        user_profile = {
+            "position": user.position, "experience": user.experience, "is_manager": user.is_manager
+        }
+
+        summary_text = summary_recommendation(user_profile, history_summary)
+        
+        user.current_recommendation = summary_text
+        user.recommendation_updated_at = datetime.now(timezone.utc)
+
+    except Exception as e:
+        print(f"Не удалось сгенерировать сводную рекомендацию после теста: {e}")
+
     db.session.commit()
 
     return jsonify({"message": "Тест успешно пройден!", "resultId": new_result.id})
@@ -307,3 +346,13 @@ def get_user_results():
             'scores': result.scores
         })
     return jsonify(output)
+
+@tests_bp.route('/summary-recommendation', methods=['GET'])
+@jwt_required()
+def get_summary_recommendation():
+    user = User.query.get(get_jwt_identity())
+    
+    if not user.current_recommendation:
+        return jsonify({"recommendation": "Пройдите свой первый тест, чтобы получить персональную рекомендацию!"})
+    
+    return jsonify({"recommendation": user.current_recommendation})

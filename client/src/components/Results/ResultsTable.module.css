@@ -61,3 +61,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.recommendationCell {
+  color: #00A337;
+  font-weight: 500;
+}

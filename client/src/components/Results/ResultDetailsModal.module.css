@@ -66,3 +66,57 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+.date {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.interpretationSection {
+  margin-bottom: 24px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.interpretationGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.interpretationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.interpKey {
+  text-transform: capitalize;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.interpValue {
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.низкий { background-color: #dcfce7; color: #16a34a; }
+.умеренный { background-color: #fef9c3; color: #ca8a04; }
+.высокий { background-color: #fee2e2; color: #dc2626; }
+
+.recommendationText {
+  font-size: 1rem;
+  color: #4b5563;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

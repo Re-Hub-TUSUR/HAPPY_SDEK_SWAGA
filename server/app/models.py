@@ -26,7 +26,10 @@ class User(db.Model):
     experience = db.Column(db.String(50), nullable=True)
     age = db.Column(db.Integer, nullable=True)
 
-    additional_info = db.Column(db.JSON, nullable=True) 
+    additional_info = db.Column(db.JSON, nullable=True)
+    
+    current_recommendation = db.Column(db.Text, nullable=True)
+    recommendation_updated_at = db.Column(db.DateTime, nullable=True)
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')

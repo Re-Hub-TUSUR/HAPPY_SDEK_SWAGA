@@ -5,27 +5,23 @@
   gap: 32px;
 }
 
-.pageTitle {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #111827;
-}
-
-.statsGrid {
+.topGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   align-items: stretch;
 }
 
-.statBlock {
+.statBlock,
+.chartBlock,
+.recommendationBlock {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #111827;
   margin: 0;
@@ -39,8 +35,14 @@
   gap: 16px;
 }
 
+.resultsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 @media (max-width: 1024px) {
-  .statsGrid {
+  .topGrid {
     grid-template-columns: 1fr;
   }
 }
