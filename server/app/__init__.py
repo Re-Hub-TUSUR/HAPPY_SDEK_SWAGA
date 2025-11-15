@@ -7,6 +7,8 @@ from .main.routes import main_bp
 from .cli import register_cli_commands
 from .seeder import register_seeder
 from .tests_bp import tests_bp
+from .analytics_bp import analytics_bp
+from .chatbot_bp import chatbot_bp
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder='../static', static_url_path='/static')
@@ -22,6 +24,8 @@ def create_app(config_class=Config):
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
     app.register_blueprint(main_bp, url_prefix='/api/v1')
     app.register_blueprint(tests_bp, url_prefix='/api/v1/tests')
+    app.register_blueprint(analytics_bp, url_prefix='/api/v1/analytics')
+    app.register_blueprint(chatbot_bp, url_prefix='/api/v1/chatbot')
     
     register_cli_commands(app)
     register_seeder(app)

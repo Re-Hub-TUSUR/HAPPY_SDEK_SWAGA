@@ -20,13 +20,23 @@ export interface TestResult {
   test_id: number;
   test_title: string;
   created_at: string;
-  interpretation: {
-    overall_level?: 'Низкий' | 'Умеренный' | 'Высокий';
-    [key: string]: any;
-  };
+  interpretation: { [key: string]: any };
   recommendations: string;
-  scores: {
-    overall?: number;
-    [key: string]: any;
+  scores: { [key: string]: any };
+}
+
+export interface ApiUser {
+  id: number;
+  name: string;
+}
+
+export interface OverviewData {
+  total_users: number;
+  total_tests_passed: number;
+  average_stress_level: number;
+  level_distribution: {
+    low: number;
+    medium: number;
+    high: number;
   };
 }

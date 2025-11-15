@@ -3,7 +3,7 @@ import styles from './StatCard.module.css';
 
 interface StatCardProps {
   score: number | null;
-  maxScore: number;
+  maxScore?: number;
   description: React.ReactNode;
   color: string;
 }
@@ -11,9 +11,9 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ score, maxScore, description, color }) => {
   return (
     <div className={styles.card}>
-      <p className={styles.score} style={{ color: color }}> {/* <-- Применяем цвет */}
+      <p className={styles.score} style={{ color: color }}>
         {score !== null ? score : '-'}
-        <span className={styles.maxScore}>/{maxScore}</span>
+        {maxScore && <span className={styles.maxScore}>/{maxScore}</span>}
       </p>
       <p className={styles.description}>{description}</p>
     </div>
