@@ -25,4 +25,8 @@ export const testApi = {
     const { data } = await apiClient.post(`/tests/${testId}/submit`, { answers });
     return data;
   },
+  getUserResults: async () => {
+    const { data } = await apiClient.get('/tests/results');
+    return data;
+  },
 };

@@ -1,0 +1,30 @@
+.filterContainer {
+  display: flex;
+  gap: 8px;
+  background-color: #f3f4f6;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.filterButton {
+  background-color: transparent;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease-in-out;
+}
+
+.filterButton:hover {
+  background-color: #e5e7eb;
+}
+
+.filterButton.active {
+  background-color: #FFFFFF;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
