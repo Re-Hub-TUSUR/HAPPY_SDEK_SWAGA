@@ -58,7 +58,8 @@ def recomendation(test_data: dict, test_type: str, user_profile: dict):
         f"- Город: {user_profile.get('city', 'не указан')}\n"
     )
     
-    kpi_info = user_profile.get('additional_info', {}).get('kpi')
+    additional_info = user_profile.get('additional_info') or {}
+    kpi_info = additional_info.get('kpi')
     if kpi_info:
         kpi_summary = ", ".join([f"{month}: {val}%" for month, val in kpi_info.items()])
         profile_summary += f"- Динамика KPI (последние месяцы): {kpi_summary}\n"

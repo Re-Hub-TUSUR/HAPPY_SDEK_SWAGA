@@ -266,25 +266,36 @@ def submit_test(test_id):
         "additional_info": user.additional_info
     }
 
-    if test.type in ['CBI', 'OLBI']:
-        formatted_answers = {}
-        for q in test.questions:
-            if q.canonical_id and q.id in answers_dict:
-                formatted_answers[str(q.canonical_id)] = answers_dict[q.id]
+    try:
+        if test.type in ['CBI', 'OLBI']:
+            formatted_answers = {}
+            for q in test.questions:
+                if q.canonical_id and q.id in answers_dict:
+                    formatted_answers[str(q.canonical_id)] = answers_dict[q.id]
+            
+            total_questions = len(get_standard_questions(test.type))
+            if len(formatted_answers) < total_questions:
+                return jsonify(message=f"Пожалуйста, ответьте на все вопросы. Ожидалось {total_questions} ответов, получено {len(formatted_answers)}."), 400
+
+            if test.type == 'CBI':
+                scores = score_cbi(formatted_answers)
+                interp = interpret_cbi(scores)
+                recs = recomendation(formatted_answers, "CBI", user_profile)
+            elif test.type == 'OLBI':
+                scores = score_olbi(formatted_answers)
+                interp = interpret_olbi(scores)
+                recs = recomendation(formatted_answers, "OLBI", user_profile)
         
-        if test.type == 'CBI':
-            scores = score_cbi(formatted_answers)
-            interp = interpret_cbi(scores)
-            recs = recomendation(formatted_answers, "CBI", user_profile)
-        elif test.type == 'OLBI':
-            scores = score_olbi(formatted_answers)
-            interp = interpret_olbi(scores)
-            recs = recomendation(formatted_answers, "OLBI", user_profile)
+        else:
+            if len(answers_dict) < len(test.questions):
+                 return jsonify(message=f"Пожалуйста, ответьте на все вопросы. Ожидалось {len(test.questions)} ответов, получено {len(answers_dict)}."), 400
+            
+            questions_map = {q.id: q.text for q in test.questions}
+            prompt_data = {questions_map.get(qid): ans for qid, ans in answers_dict.items() if qid in questions_map}
+            recs = recomendation(prompt_data, "small", user_profile)
     
-    else:
-        questions_map = {q.id: q.text for q in test.questions}
-        prompt_data = {questions_map.get(qid): ans for qid, ans in answers_dict.items() if qid in questions_map}
-        recs = recomendation(prompt_data, "small", user_profile)
+    except ValueError as e:
+        return jsonify(message=f"Ошибка обработки ответов: {str(e)}"), 400
 
     new_result = TestResult(
         user_id=current_user_id,
@@ -294,6 +305,7 @@ def submit_test(test_id):
         interpretation=interp,
         recommendations=recs
     )
+    
     db.session.add(new_result)
     
     points_to_add = 0
