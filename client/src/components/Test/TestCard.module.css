@@ -9,11 +9,6 @@
   position: relative;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-}
-
 .imageContainer {
   height: 160px;
   background-color: #f5f7fa;
@@ -173,6 +168,25 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   z-index: 5;
 }
+
+.pointsBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  background-color: rgba(251, 191, 36, 0.9);
+  color: #78350f;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  backdrop-filter: blur(2px);
+}
+
 
 @media (max-width: 768px) {
   .psychologistActions {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './TestCard.module.css';
-import { FiEye, FiEdit, FiTrash2, FiCheckCircle } from 'react-icons/fi';
+import { FiEye, FiEdit, FiTrash2, FiCheckCircle, FiStar } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -16,9 +16,10 @@ interface TestCardProps {
   isCompleted: boolean;
   category: string;
   nextAvailableAt: string | null;
+  points: number;
 }
 
-const TestCard: React.FC<TestCardProps> = ({ testId, title, description, imageUrl, isPsychologist, onTakeTest, onDelete, isCompleted, category, nextAvailableAt }) => {
+const TestCard: React.FC<TestCardProps> = ({ testId, title, description, imageUrl, isPsychologist, onTakeTest, onDelete, isCompleted, category, nextAvailableAt, points }) => {
   const fullImageUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${imageUrl || 'default_test_image.png'}`;
 
   const categoryMap: { [key: string]: string } = {
@@ -34,6 +35,14 @@ const TestCard: React.FC<TestCardProps> = ({ testId, title, description, imageUr
 
   return (
     <div className={`${styles.card} ${isCompleted && !isPsychologist ? styles.completed : ''}`}>
+      
+      {!isPsychologist && !isCompleted && points > 0 && (
+        <div className={styles.pointsBadge}>
+          {FiStar({ size: 20 })}
+          <span>+{points}</span>
+        </div>
+      )}
+
       <div className={styles.imageContainer}>
         <img src={fullImageUrl} alt={title} className={styles.image} onError={(e) => {
           (e.target as HTMLImageElement).src = `${process.env.REACT_APP_SERVER_URL}/static/uploads/default_test_image.png`;

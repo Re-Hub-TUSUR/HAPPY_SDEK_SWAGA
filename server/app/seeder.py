@@ -1,8 +1,10 @@
 import click
 from flask.cli import with_appcontext
-from .models import User
+from .models import User, Test, TestResult
 from .extensions import db
 import json
+from datetime import datetime, timedelta
+import random
 
 MOCK_DATA = [
     {"full_name": "Звёздкина Анна Борисовна", "department": "филиал", "city": "Санкт-Петербург", "position": "Старший менеджер по работе с клиентами", "experience": "5 лет 4 месяца", "age": 28, "is_manager": True, "kpi": {"июнь": 100, "июль": 96, "август": 80, "сентябрь": 90, "октябрь": 90}, "attestation": "прошел", "training": "в процессе", "last_vacation": "фев.25", "sick_leave": True, "reprimand": False, "corp_activity": True, "burnout_state": "все хорошо"},
@@ -84,5 +86,69 @@ def seed_db_command():
     print("\nВсе пользователи успешно добавлены в базу данных!")
     print("Стандартный пароль для всех: password123")
 
+def get_interpretation_level(score):
+    if score >= 75:
+        return "Высокий"
+    elif score >= 50:
+        return "Умеренный"
+    else:
+        return "Низкий"
+
+@click.command("seed-results")
+@with_appcontext
+@click.argument("email")
+def seed_results_command(email):
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        print(f"Ошибка: Пользователь с email {email} не найден.")
+        return
+
+    test = Test.query.first()
+    if not test:
+        print("Ошибка: В базе данных нет ни одного теста. Пожалуйста, создайте хотя бы один тест под ролью психолога.")
+        return
+
+    if TestResult.query.filter_by(user_id=user.id).first():
+        print(f"У пользователя {email} уже есть результаты тестов. Команда отменена, чтобы избежать дублирования.")
+        return
+
+    print(f"Генерация моковых результатов для пользователя {user.email}...")
+
+    for i in range(40, -1, -random.randint(2, 4)):
+        date = datetime.utcnow() - timedelta(days=i)
+        
+        overall_score = random.randint(20, 90)
+        personal_score = overall_score * random.uniform(0.8, 1.2)
+        work_score = overall_score * random.uniform(0.8, 1.2)
+        
+        scores = {
+            "overall": round(overall_score, 1),
+            "personal": round(personal_score, 1),
+            "work_related": round(work_score, 1)
+        }
+        
+        interpretation = {
+            "note": ">=50 — признак выраженного выгорания.",
+            "work_level": get_interpretation_level(work_score),
+            "personal_level": get_interpretation_level(personal_score),
+            "overall_level": get_interpretation_level(overall_score)
+        }
+
+        new_result = TestResult(
+            user_id=user.id,
+            test_id=test.id,
+            created_at=date,
+            scores=scores,
+            interpretation=interpretation,
+            recommendations="Это автоматически сгенерированная рекомендация для мокового результата теста.",
+            answers=[{"question_id": i, "answer": random.randint(1, 5)} for i in range(1, 20)] # Dummy answers
+        )
+        db.session.add(new_result)
+        print(f"  - Создан результат за {date.strftime('%Y-%m-%d')} с общим баллом {scores['overall']}")
+
+    db.session.commit()
+    print("\nВсе моковые результаты успешно добавлены в базу данных!")
+
 def register_seeder(app):
     app.cli.add_command(seed_db_command)
+    app.cli.add_command(seed_results_command)

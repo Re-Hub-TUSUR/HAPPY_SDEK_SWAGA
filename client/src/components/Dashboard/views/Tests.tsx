@@ -17,6 +17,7 @@ interface Test {
   image_url: string | null;
   category: string;
   next_available_at: string | null;
+  points: number;
 }
 
 const Tests: React.FC = () => {
@@ -86,6 +87,7 @@ const Tests: React.FC = () => {
               isCompleted={!!test.next_available_at}
               nextAvailableAt={test.next_available_at}
               category={test.category}
+              points={test.points}
             />
           ))}
         </div>

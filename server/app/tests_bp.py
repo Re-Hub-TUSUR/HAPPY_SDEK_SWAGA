@@ -19,6 +19,17 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_points_for_category(category: str) -> int:
+    if category == 'daily':
+        return 10
+    elif category == 'weekly':
+        return 25
+    elif category == 'monthly':
+        return 50
+    elif category == 'specialized':
+        return 30
+    return 0
+
 def psychologist_required():
     def wrapper(fn):
         @wraps(fn)
@@ -135,21 +146,35 @@ def get_all_tests():
             period_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
         
         if period_start:
+            last_result_in_period = None
             for result in user_results:
                 if result.test_id == t.id and result.created_at.replace(tzinfo=timezone.utc) >= period_start:
-                    is_completed = True
-                    break
+                    if last_result_in_period is None or result.created_at > last_result_in_period.created_at:
+                        last_result_in_period = result
+            
+            if last_result_in_period:
+                is_completed = True
+                completion_time = last_result_in_period.created_at.replace(tzinfo=timezone.utc)
 
-        if is_completed:
-            if t.category == 'daily':
-                next_date = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-                next_available_at = next_date.isoformat()
-            elif t.category == 'weekly':
-                next_date = (now + timedelta(weeks=1) - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
-                next_available_at = next_date.isoformat()
-            elif t.category == 'monthly':
-                next_month_start = (now.replace(day=1) + timedelta(days=32)).replace(day=1)
-                next_available_at = next_month_start.isoformat()
+                next_date = None
+                if t.category == 'daily':
+                    next_date = (completion_time.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1))
+                elif t.category == 'weekly':
+                    start_of_completion_week = completion_time - timedelta(days=completion_time.weekday())
+                    next_date = (start_of_completion_week.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(weeks=1))
+                elif t.category == 'monthly':
+                    start_of_completion_month = completion_time.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+                    next_month_year = start_of_completion_month.year
+                    next_month_month = start_of_completion_month.month + 1
+                    if next_month_month > 12:
+                        next_month_month = 1
+                        next_month_year += 1
+                    next_date = start_of_completion_month.replace(year=next_month_year, month=next_month_month)
+                
+                if next_date and now < next_date:
+                    next_available_at = next_date.isoformat()
+                else:
+                    is_completed = False
 
         response_data.append({
             "id": t.id, 
@@ -158,7 +183,8 @@ def get_all_tests():
             "type": t.type,
             "category": t.category,
             "image_url": t.image_url,
-            "next_available_at": next_available_at
+            "next_available_at": next_available_at if is_completed else None,
+            "points": get_points_for_category(t.category)
         })
         
     return jsonify(response_data)
@@ -305,18 +331,9 @@ def submit_test(test_id):
         interpretation=interp,
         recommendations=recs
     )
-    
     db.session.add(new_result)
     
-    points_to_add = 0
-    if test.category == 'daily':
-        points_to_add = 10
-    elif test.category == 'weekly':
-        points_to_add = 25
-    elif test.category == 'monthly':
-        points_to_add = 50
-    elif test.category == 'specialized':
-        points_to_add = 30
+    points_to_add = get_points_for_category(test.category)
     
     user.points = (user.points or 0) + points_to_add
     
@@ -368,7 +385,7 @@ def get_user_results():
             'id': result.id,
             'test_id': result.test.id,
             'test_title': result.test.title,
-            'created_at': result.created_at.isoformat(),
+            'created_at': result.created_at.replace(tzinfo=timezone.utc).isoformat(),
             'interpretation': result.interpretation,
             'recommendations': result.recommendations,
             'scores': result.scores

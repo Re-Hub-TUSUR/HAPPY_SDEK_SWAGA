@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from functools import wraps
 from sqlalchemy import func, case
+from datetime import timezone
 
 from .models import User, TestResult
 from .extensions import db
@@ -70,7 +71,7 @@ def get_results_by_user_id(user_id):
             'id': result.id,
             'test_id': result.test.id,
             'test_title': result.test.title,
-            'created_at': result.created_at.isoformat(),
+            'created_at': result.created_at.replace(tzinfo=timezone.utc).isoformat(),
             'interpretation': result.interpretation,
             'recommendations': result.recommendations,
             'scores': result.scores
