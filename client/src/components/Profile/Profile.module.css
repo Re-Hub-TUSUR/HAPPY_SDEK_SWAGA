@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1100px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .profileHeader {
@@ -121,8 +121,22 @@
 }
 
 @media (max-width: 600px) {
+  .profileContainer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
   .profileHeader {
     flex-direction: column;
     text-align: center;
+    align-items: center;
+  }
+
+  .userInfo {
+    align-items: center;
+  }
+
+  .fullName {
+    font-size: 1.75rem;
   }
 }

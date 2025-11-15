@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatView.module.css';
 import { chatApi } from '../../../services/chatService';
-import { FiSend } from 'react-icons/fi'; // <-- НОВЫЙ ИМПОРТ
+import { FiSend } from 'react-icons/fi';
 
 interface Message {
   text: string;
@@ -88,7 +88,6 @@ const ChatView: React.FC = () => {
           onClick={handleSendMessage}
           disabled={isTyping || !sessionId || !currentMessage.trim()}
         >
-          {/* --- ИЗМЕНЕНИЕ ЗДЕСЬ --- */}
           {FiSend({ size: 20 })}
         </button>
       </div>

@@ -11,11 +11,11 @@
 }
 
 .score {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 600;
   line-height: 1.1;
   margin: 16px 0;
-  transition: color 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .score .maxScore {
@@ -31,4 +31,22 @@
 
 .description strong {
   color: #00A337;
+}
+
+@media (max-width: 768px) {
+  .score {
+    font-size: 3.5rem;
+  }
+  .score .maxScore {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .score {
+    font-size: 3rem;
+  }
+  .score .maxScore {
+    font-size: 1.5rem;
+  }
 }

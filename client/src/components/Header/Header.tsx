@@ -69,7 +69,6 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
                   <div className={styles.mobileMenuHeader}>
                     <Link to="/profile" className={styles.profileLink} onClick={() => setIsMobileMenuOpen(false)}>
                       <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
-                       {/* --- И ИСПРАВЛЕНИЕ ЗДЕСЬ --- */}
                       <span className={styles.userName}>{user?.first_name || 'Профиль'}</span>
                     </Link>
                     <button onClick={() => setIsMobileMenuOpen(false)}>

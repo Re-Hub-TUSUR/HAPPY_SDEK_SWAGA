@@ -53,7 +53,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/tests/new" element={<TestBuilderPage />} />
         <Route path="/tests/edit/:testId" element={<TestBuilderPage />} />
-        <Route path="/test/:testId" element={<TestTakingPage />} /> {/* --- НОВЫЙ РОУТ --- */}
+        <Route path="/test/:testId" element={<TestTakingPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} /> 
     </Routes>

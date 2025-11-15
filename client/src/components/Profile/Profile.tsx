@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { authApi } from '../../services/authService';
 import { useToast } from '../../contexts/ToastContext';
-import { FiEdit2, FiStar } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
 import ChangePasswordModal from './ChangePasswordModal';
 import styles from './Profile.module.css';
 

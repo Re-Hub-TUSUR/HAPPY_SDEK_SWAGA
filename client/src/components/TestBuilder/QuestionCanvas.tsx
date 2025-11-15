@@ -35,7 +35,7 @@ const QuestionCanvas: React.FC<QuestionCanvasProps> = ({
 
       {questions.map((q, index) => (
         <QuestionEditorCard
-          key={q.temp_id} // --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
+          key={q.temp_id}
           index={index}
           question={q}
           onUpdate={onUpdateQuestion}
