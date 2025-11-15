@@ -8,12 +8,15 @@ import { testApi } from '../../../services/testService';
 import { useToast } from '../../../contexts/ToastContext';
 import styles from './Tests.module.css';
 import { FiPlus, FiInbox } from 'react-icons/fi';
+import Loader from '../../Loader/Loader';
 
 interface Test {
   id: number;
   title: string;
   description: string;
   image_url: string | null;
+  category: string;
+  next_available_at: string | null;
 }
 
 const Tests: React.FC = () => {
@@ -23,6 +26,7 @@ const Tests: React.FC = () => {
   const [tests, setTests] = useState<Test[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deletingTest, setDeletingTest] = useState<Test | null>(null);
+
   const isPsychologist = user?.role === 'psychologist';
 
   const fetchTests = useCallback(async () => {
@@ -56,7 +60,7 @@ const Tests: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div>Загрузка тестов...</div>;
+    return <Loader />;
   }
 
   return (
@@ -79,6 +83,9 @@ const Tests: React.FC = () => {
               isPsychologist={isPsychologist}
               onTakeTest={() => navigate(`/test/${test.id}`)}
               onDelete={() => setDeletingTest(test)}
+              isCompleted={!!test.next_available_at}
+              nextAvailableAt={test.next_available_at}
+              category={test.category}
             />
           ))}
         </div>

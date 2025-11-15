@@ -11,11 +11,18 @@ interface TestSettingsProps {
   isAnonymous: boolean;
   setIsAnonymous: (isAnonymous: boolean) => void;
   setImage: (file: File | null) => void;
+  category: string;
+  setCategory: (category: string) => void;
+  validFrom: string;
+  setValidFrom: (date: string) => void;
+  validUntil: string;
+  setValidUntil: (date: string) => void;
 }
 
 const TestSettings: React.FC<TestSettingsProps> = ({
   title, setTitle, description, setDescription, type, onTypeChange,
-  isAnonymous, setIsAnonymous, setImage
+  isAnonymous, setIsAnonymous, setImage,
+  category, setCategory, validFrom, setValidFrom, validUntil, setValidUntil
 }) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +55,29 @@ const TestSettings: React.FC<TestSettingsProps> = ({
           <option value="OLBI">Стандартный тест OLBI</option>
         </select>
       </div>
+
+      <div className={styles.inputGroup}>
+        <label htmlFor="test-category">Категория/Периодичность</label>
+        <select id="test-category" value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="daily">Ежедневный</option>
+          <option value="weekly">Еженедельный</option>
+          <option value="monthly">Ежемесячный</option>
+          <option value="specialized">Специализированный (с датой)</option>
+        </select>
+      </div>
+
+      {category === 'specialized' && (
+        <div className={styles.dateRange}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="valid-from">Доступен с</label>
+            <input id="valid-from" type="date" value={validFrom} onChange={(e) => setValidFrom(e.target.value)} />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="valid-until">Доступен до</label>
+            <input id="valid-until" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} />
+          </div>
+        </div>
+      )}
 
       <div className={styles.inputGroup}>
         <label htmlFor="image-upload">Обложка теста (необязательно)</label>

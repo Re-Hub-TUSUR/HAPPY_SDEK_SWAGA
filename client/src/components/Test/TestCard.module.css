@@ -6,6 +6,7 @@
   flex-direction: column;
   overflow: hidden;
   transition: all 0.2s ease-in-out;
+  position: relative;
 }
 
 .card:hover {
@@ -32,6 +33,18 @@
 .cardContent {
   padding: 20px;
   flex-grow: 1;
+}
+
+.categoryBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 12px;
+  text-transform: capitalize;
 }
 
 .title {
@@ -61,10 +74,18 @@
   text-overflow: ellipsis;
 }
 
-.ctaButton {
+.ctaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 16px 20px;
-  border: none;
   border-top: 1px solid #f0f2f5;
+}
+
+.ctaButton {
+  padding: 12px;
+  width: 100%;
+  border: none;
   background-color: #FFFFFF;
   color: #00A337;
   font-size: 1rem;
@@ -72,10 +93,29 @@
   cursor: pointer;
   transition: background-color 0.2s;
   font-family: 'Montserrat', sans-serif;
+  border: 1px solid #00A337;
+  border-radius: 8px;
 }
 
 .ctaButton:hover {
   background-color: #f5f7fa;
+}
+
+.ctaButton:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+.ctaButton:disabled:hover {
+  background-color: #f9fafb;
+}
+
+.nextDateMessage {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 0;
 }
 
 .psychologistActions {
@@ -111,6 +151,27 @@
 
 .psychologistActions .deleteAction {
   color: #ef4444;
+}
+
+.card.completed {
+  opacity: 0.7;
+}
+
+.completedOverlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #00A337;
+  color: #FFFFFF;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 5;
 }
 
 @media (max-width: 768px) {

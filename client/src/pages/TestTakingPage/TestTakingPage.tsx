@@ -9,10 +9,22 @@ import ScaleInput from '../../components/TestTaking/ScaleInput';
 import ChoiceInput from '../../components/TestTaking/ChoiceInput';
 import TextInput from '../../components/TestTaking/TextInput';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
+import CompletionModal from '../../components/TestTaking/CompletionModal';
+import { 
+  format, 
+  addDays, 
+  startOfDay, 
+  addWeeks, 
+  startOfWeek, 
+  addMonths, 
+  startOfMonth 
+} from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 interface TestData {
   id: number;
   title: string;
+  category: string;
   questions: Question[];
 }
 
@@ -27,6 +39,7 @@ const TestTakingPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [completionMessage, setCompletionMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!testId) return;
@@ -69,17 +82,40 @@ const TestTakingPage: React.FC = () => {
       }));
 
       await testApi.submitTest(parseInt(testId!), answersPayload);
-      addToast('Тест успешно пройден!', 'success');
-      navigate('/dashboard?tab=Результаты');
+      
+      let nextDate: Date | null = null;
+      const now = new Date();
+      if (testData?.category === 'daily') {
+        nextDate = startOfDay(addDays(now, 1));
+      } else if (testData?.category === 'weekly') {
+        nextDate = startOfWeek(addWeeks(now, 1), { weekStartsOn: 1 });
+      } else if (testData?.category === 'monthly') {
+        nextDate = startOfMonth(addMonths(now, 1));
+      }
+      
+      if (nextDate) {
+        setCompletionMessage(`Следующий раз этот тест можно будет пройти ${format(nextDate, 'dd MMMM yyyy', { locale: ru })}.`);
+      } else {
+        setCompletionMessage('');
+      }
+
     } catch (error: any) {
       addToast(error.message || 'Ошибка при отправке теста', 'error');
-    } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleCloseCompletionModal = () => {
+    setCompletionMessage(null);
+    navigate('/dashboard?tab=Тесты');
+  };
+
   if (isLoading || !testData) {
     return <Loader />;
+  }
+  
+  if (completionMessage !== null) {
+    return <CompletionModal nextDateMessage={completionMessage} onClose={handleCloseCompletionModal} />;
   }
 
   const currentQuestion = testData.questions[currentQuestionIndex];

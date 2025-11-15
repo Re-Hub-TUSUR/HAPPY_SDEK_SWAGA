@@ -130,9 +130,9 @@
 
 ## 📋 Основные команды Docker
 
--   **Запустить/перезапустить все сервисы (в фоне):** `docker-compose up -d --build`
--   **Остановить все сервисы:** `docker-compose down`
--   **Остановить и удалить данные (полный сброс БД):** `docker-compose down -v`
--   **Посмотреть логи сервера:** `docker-compose logs -f server`
--   **Посмотреть логи клиента:** `docker-compose logs -f client`
+-   **Запустить/перезапустить все сервисы (в фоне):** `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build`
+-   **Остановить все сервисы:** `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down`
+-   **Остановить и удалить данные (полный сброс БД):** `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v`
+-   **Посмотреть логи сервера:** `docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs -f server`
+-   **Посмотреть логи клиента:** `docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs -f client`
 -   **Выполнить команду внутри контейнера:** `docker-compose exec <имя_сервиса> <команда>`

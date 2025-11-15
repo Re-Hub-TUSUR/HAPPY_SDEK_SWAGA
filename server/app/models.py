@@ -44,6 +44,9 @@ class Test(db.Model):
     type = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(255), nullable=True, default='default_test_image.png')
     is_anonymous = db.Column(db.Boolean, default=False, nullable=False)
+    category = db.Column(db.String(50), nullable=False, default='specialized')
+    valid_from = db.Column(db.DateTime, nullable=True)
+    valid_until = db.Column(db.DateTime, nullable=True)
     questions = db.relationship('Question', backref='test', lazy=True, cascade="all, delete-orphan")
     test_results = db.relationship('TestResult', backref='test', lazy=True, cascade="all, delete-orphan")
 

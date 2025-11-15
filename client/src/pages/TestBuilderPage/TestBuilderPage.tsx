@@ -22,6 +22,10 @@ const TestBuilderPage: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   
+  const [category, setCategory] = useState('daily');
+  const [validFrom, setValidFrom] = useState('');
+  const [validUntil, setValidUntil] = useState('');
+  
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(!!testId);
   
@@ -41,10 +45,7 @@ const TestBuilderPage: React.FC = () => {
           setTitle(data.title);
           setDescription(data.description);
           setType(data.type);
-          setQuestions(data.questions.map((q: any) => ({
-            ...q,
-            temp_id: uuidv4()
-          })));
+          setQuestions(data.questions.map((q: any) => ({ ...q, temp_id: uuidv4() })));
         } catch (error) {
           addToast('Не удалось загрузить данные теста', 'error');
           navigate('/dashboard');
@@ -62,7 +63,7 @@ const TestBuilderPage: React.FC = () => {
     } else {
         setIsDirty(true);
     }
-  }, [title, description, type, isAnonymous, image, questions]);
+  }, [title, description, type, isAnonymous, image, questions, category, validFrom, validUntil]);
 
 
   const handleTypeChange = (newType: string) => {
@@ -125,6 +126,13 @@ const TestBuilderPage: React.FC = () => {
     formData.append('description', description);
     formData.append('type', type);
     formData.append('is_anonymous', String(isAnonymous));
+    formData.append('category', category);
+    
+    if (category === 'specialized') {
+      formData.append('valid_from', validFrom);
+      formData.append('valid_until', validUntil);
+    }
+    
     if (image) {
       formData.append('image', image);
     }
@@ -179,6 +187,9 @@ const TestBuilderPage: React.FC = () => {
             type={type} onTypeChange={handleTypeChange}
             isAnonymous={isAnonymous} setIsAnonymous={setIsAnonymous}
             setImage={setImage}
+            category={category} setCategory={setCategory}
+            validFrom={validFrom} setValidFrom={setValidFrom}
+            validUntil={validUntil} setValidUntil={setValidUntil}
           />
           <QuestionCanvas
             questions={questions}
