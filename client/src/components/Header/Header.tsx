@@ -24,7 +24,10 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
 
   return (
     <header className={headerClasses}>
-      <img src={cdekLogo} alt="Логотип СДЭК" className={styles.logo} />
+      <Link to={isAuthenticated ? "/dashboard" : "/"}>
+        <img src={cdekLogo} alt="Логотип СДЭК" className={styles.logo} />
+      </Link>
+      
       {isLoading ? null : isAuthenticated ? (
         <>
           <div className={styles.desktopNav}>
@@ -42,7 +45,8 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
             <div className={styles.userInfo}>
               <Link to="/profile" className={styles.profileLink}>
                 <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
-                <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+                {/* --- ИСПРАВЛЕНИЕ ЗДЕСЬ --- */}
+                <span className={styles.userName}>{user?.first_name || 'Профиль'}</span>
               </Link>
               <button onClick={logout} className={styles.logoutButton}>Выйти</button>
             </div>
@@ -62,7 +66,8 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
                   <div className={styles.mobileMenuHeader}>
                     <Link to="/profile" className={styles.profileLink} onClick={() => setIsMobileMenuOpen(false)}>
                       <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
-                      <span className={styles.userName}>{user?.name || 'Пользователь'}</span>
+                       {/* --- И ИСПРАВЛЕНИЕ ЗДЕСЬ --- */}
+                      <span className={styles.userName}>{user?.first_name || 'Профиль'}</span>
                     </Link>
                     <button onClick={() => setIsMobileMenuOpen(false)}>
                       {FiX({ size: 28, color: '#374151' })}

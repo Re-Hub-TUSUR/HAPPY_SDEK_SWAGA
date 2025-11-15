@@ -1,134 +1,118 @@
 .profileContainer {
   width: 100%;
   max-width: 1100px;
-  margin: 60px auto;
+  margin: 40px auto;
+  padding: 0 20px;
 }
 
-.title {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 60px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 120px;
-  align-items: flex-start;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.inputGroup label {
-  font-size: 1rem;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
-.inputWrapper {
+.profileHeader {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #d1d5db;
-}
-
-.inputWrapper input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 12px 0;
-  font-size: 1.125rem;
-  font-family: 'Montserrat', sans-serif;
-  outline: none;
-}
-
-.iconButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #9ca3af;
-  padding: 8px;
-}
-.saveIcon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #00A337;
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-}
-
-.passwordSection {
-  margin-top: -10px;
-}
-
-.changePasswordLink {
-  font-size: 1rem;
-  color: #6b7280;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.changePasswordLink:hover {
-  color: #374151;
-}
-
-.avatarSection {
-  display: flex;
-  justify-content: center;
+  gap: 32px;
+  margin-bottom: 40px;
 }
 
 .avatarWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  position: relative;
   cursor: pointer;
-  padding: 32px;
-  border-radius: 24px;
-  background-color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  text-align: center;
-  color: #374151;
-  font-weight: 500;
-  font-size: 1rem;
+}
+.avatarWrapper span {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(0,0,0,0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.avatarWrapper:hover span {
+  opacity: 1;
 }
 
 .avatar {
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  
-  .avatarSection {
-    order: -1;
-  }
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
 
-  .title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 40px;
-  }
+.fullName {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
 
-  .passwordSection {
+.position {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin: 4px 0 16px 0;
+}
+
+.actions {
+  display: flex;
+}
+
+.changePasswordLink {
+  background: none;
+  border: 1px solid #d1d5db;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.changePasswordLink:hover {
+  background-color: #f9fafb;
+}
+
+.infoSection {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.infoTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.infoItem label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.infoItem p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .profileHeader {
+    flex-direction: column;
     text-align: center;
   }
 }

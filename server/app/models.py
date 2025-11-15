@@ -1,13 +1,32 @@
 from .extensions import db, bcrypt
 import datetime
 
+from .extensions import db, bcrypt
+import datetime
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    
+    username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    
+    last_name = db.Column(db.String(100), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    patronymic = db.Column(db.String(100), nullable=True)
+    
     role = db.Column(db.String(20), nullable=False, default='user')
-    avatar_url = db.Column(db.String(255), nullable=True, default='default_avatar.png')
+    avatar_url = db.Column(db.String(255), nullable=True)
+    
+    is_manager = db.Column(db.Boolean, default=False)
+    department = db.Column(db.String(100), nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
+    city = db.Column(db.String(100), nullable=True)
+    position = db.Column(db.String(100), nullable=True)
+    experience = db.Column(db.String(50), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+
+    additional_info = db.Column(db.JSON, nullable=True) 
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -16,7 +35,7 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User {self.username}>'
 
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)

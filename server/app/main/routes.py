@@ -39,7 +39,24 @@ def health_check():
 def get_profile():
     user = User.query.get(get_jwt_identity())
     if user:
-        return jsonify(id=user.id, name=user.name, email=user.email, role=user.role, avatar_url=user.avatar_url)
+        return jsonify(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            patronymic=user.patronymic,
+            role=user.role, 
+            avatar_url=user.avatar_url,
+            is_manager=user.is_manager,
+            department=user.department,
+            gender=user.gender,
+            city=user.city,
+            position=user.position,
+            experience=user.experience,
+            age=user.age,
+            additional_info=user.additional_info
+        )
     return jsonify(message="Пользователь не найден"), 404
 
 @main_bp.route("/profile", methods=["PUT"])
@@ -82,7 +99,17 @@ def upload_avatar():
     file.save(os.path.join(upload_folder, filename))
     user.avatar_url = filename
     db.session.commit()
-    return jsonify(id=user.id, name=user.name, email=user.email, role=user.role, avatar_url=user.avatar_url), 200
+    
+    return jsonify(
+        id=user.id, 
+        username=user.username, 
+        email=user.email, 
+        role=user.role, 
+        avatar_url=user.avatar_url,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        patronymic=user.patronymic
+    ), 200
 
 @main_bp.route("/profile/password", methods=["PUT"])
 @jwt_required()

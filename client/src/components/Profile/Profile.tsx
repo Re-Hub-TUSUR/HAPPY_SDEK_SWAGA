@@ -4,56 +4,15 @@ import { authApi } from '../../services/authService';
 import { useToast } from '../../contexts/ToastContext';
 import ChangePasswordModal from './ChangePasswordModal';
 import styles from './Profile.module.css';
-import { FiEdit2 } from 'react-icons/fi';
 
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();
   const { addToast } = useToast();
   
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [isNameEditing, setIsNameEditing] = useState(false);
-  const [isEmailEditing, setIsEmailEditing] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setName(user?.name || '');
-    setEmail(user?.email || '');
-  }, [user]);
-
   const avatarUrl = `${process.env.REACT_APP_SERVER_URL}/static/uploads/${user?.avatar_url || 'default_avatar.png'}`;
-
-  const handleSave = async (field: 'name' | 'email') => {
-    let payload: { name?: string; email?: string } = {};
-    let isChanged = false;
-
-    if (field === 'name' && name !== user?.name) {
-      payload = { name };
-      isChanged = true;
-    } else if (field === 'email' && email !== user?.email) {
-      payload = { email };
-      isChanged = true;
-    }
-
-    if (!isChanged) {
-      setIsNameEditing(false);
-      setIsEmailEditing(false);
-      return;
-    }
-
-    try {
-      const updatedUser = await authApi.updateProfile(payload);
-      updateUser(updatedUser);
-      addToast('Данные успешно обновлены!', 'success');
-      setIsNameEditing(false);
-      setIsEmailEditing(false);
-    } catch (error: any) {
-      addToast(error.message || 'Ошибка при сохранении', 'error');
-      setName(user?.name || '');
-      setEmail(user?.email || '');
-    }
-  };
   
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,60 +25,50 @@ const Profile: React.FC = () => {
       const updatedUser = await authApi.uploadAvatar(formData);
       updateUser(updatedUser);
       addToast('Изображение профиля обновлено!', 'success');
-    } catch (error: any) {
+    } catch (error: any)      {
       addToast(error.message || 'Ошибка при загрузке изображения', 'error');
     }
   };
 
-  if (!user) return <div>Загрузка...</div>;
+  if (!user) {
+    return <div>Загрузка...</div>;
+  }
+  
+  const fullName = `${user.last_name} ${user.first_name} ${user.patronymic || ''}`.trim();
 
   return (
     <>
       <div className={styles.profileContainer}>
-        <h2 className={styles.title}>Личный кабинет</h2>
-        <div className={styles.grid}>
-          <div className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="name">Имя</label>
-              <div className={styles.inputWrapper}>
-                <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} readOnly={!isNameEditing} />
-                {isNameEditing ? (
-                  <button onClick={() => handleSave('name')} className={styles.saveIcon}>Сохранить</button>
-                ) : (
-                  <button onClick={() => setIsNameEditing(true)} className={styles.iconButton}>{FiEdit2({})}</button>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="email">Почта</label>
-              <div className={styles.inputWrapper}>
-                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} readOnly={!isEmailEditing} />
-                {isEmailEditing ? (
-                  <button onClick={() => handleSave('email')} className={styles.saveIcon}>Сохранить</button>
-                ) : (
-                  <button onClick={() => setIsEmailEditing(true)} className={styles.iconButton}>{FiEdit2({})}</button>
-                )}
-              </div>
-            </div>
-            
-            <div className={styles.passwordSection}>
+        <div className={styles.profileHeader}>
+          <div className={styles.avatarWrapper} onClick={() => fileInputRef.current?.click()}>
+            <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" style={{ display: 'none' }} />
+            <img src={avatarUrl} alt="Аватар" className={styles.avatar} />
+            <span>Изменить</span>
+          </div>
+          <div className={styles.userInfo}>
+            <h1 className={styles.fullName}>{fullName}</h1>
+            <p className={styles.position}>{user.position || 'Должность не указана'}</p>
+            <div className={styles.actions}>
               <button 
                 type="button"
                 onClick={() => setIsPasswordModalOpen(true)} 
                 className={styles.changePasswordLink}
               >
-                Хотите изменить пароль?
+                Сменить пароль
               </button>
             </div>
           </div>
+        </div>
 
-          <div className={styles.avatarSection}>
-            <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" style={{ display: 'none' }} />
-            <div className={styles.avatarWrapper} onClick={() => fileInputRef.current?.click()}>
-              <img src={avatarUrl} alt="Аватар" className={styles.avatar} />
-              <span>Изменить изображение</span>
-            </div>
+        <div className={styles.infoSection}>
+          <h3 className={styles.infoTitle}>Общая информация</h3>
+          <div className={styles.infoGrid}>
+            <div className={styles.infoItem}><label>Город</label><p>{user.city || '-'}</p></div>
+            <div className={styles.infoItem}><label>Подразделение</label><p>{user.department || '-'}</p></div>
+            <div className={styles.infoItem}><label>Статус</label><p>{user.is_manager ? 'Руководитель' : 'Сотрудник'}</p></div>
+            <div className={styles.infoItem}><label>Стаж</label><p>{user.experience || '-'}</p></div>
+            <div className={styles.infoItem}><label>Возраст</label><p>{user.age ? `${user.age} лет` : '-'}</p></div>
+            <div className={styles.infoItem}><label>Email</label><p>{user.email}</p></div>
           </div>
         </div>
       </div>

@@ -3,10 +3,21 @@ import { authApi } from '../services/authService';
 
 interface User {
   id: number;
-  name: string;
+  username: string;
   email: string;
+  first_name: string;
+  last_name: string;
+  patronymic?: string;
   role: string;
   avatar_url: string | null;
+  is_manager?: boolean;
+  department?: string;
+  gender?: string;
+  city?: string;
+  position?: string;
+  experience?: string;
+  age?: number;
+  additional_info?: any;
 }
 
 interface AuthContextType {
@@ -15,7 +26,7 @@ interface AuthContextType {
   user: User | null;
   login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
-  updateUser: (newUserData: User) => void; 
+  updateUser: (newUserData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,8 +70,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await loadUser();
   }, [loadUser]);
 
-  const updateUser = useCallback((newUserData: User) => {
-    setUser(newUserData);
+  const updateUser = useCallback((newUserData: Partial<User>) => {
+    setUser(prevUser => {
+      if (!prevUser) return null;
+      return { ...prevUser, ...newUserData };
+    });
   }, []);
 
   return (
