@@ -55,6 +55,7 @@ def get_profile():
             position=user.position,
             experience=user.experience,
             age=user.age,
+            points=user.points,
             additional_info=user.additional_info
         )
     return jsonify(message="Пользователь не найден"), 404

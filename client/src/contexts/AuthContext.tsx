@@ -17,6 +17,7 @@ interface User {
   position?: string;
   experience?: string;
   age?: number;
+  points?: number;
   additional_info?: any;
 }
 

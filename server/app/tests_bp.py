@@ -296,6 +296,18 @@ def submit_test(test_id):
     )
     db.session.add(new_result)
     
+    points_to_add = 0
+    if test.category == 'daily':
+        points_to_add = 10
+    elif test.category == 'weekly':
+        points_to_add = 25
+    elif test.category == 'monthly':
+        points_to_add = 50
+    elif test.category == 'specialized':
+        points_to_add = 30
+    
+    user.points = (user.points or 0) + points_to_add
+    
     try:
         db.session.flush()
 
@@ -326,7 +338,11 @@ def submit_test(test_id):
 
     db.session.commit()
 
-    return jsonify({"message": "Тест успешно пройден!", "resultId": new_result.id})
+    return jsonify({
+        "message": "Тест успешно пройден!", 
+        "resultId": new_result.id,
+        "new_points": user.points
+    })
 
 @tests_bp.route('/results', methods=['GET'])
 @jwt_required()

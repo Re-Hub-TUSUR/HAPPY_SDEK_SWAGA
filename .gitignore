@@ -23,3 +23,6 @@ server/static/uploads/
 
 # Системные файлы macOS
 .DS_Store
+
+# Документация
+Документы/

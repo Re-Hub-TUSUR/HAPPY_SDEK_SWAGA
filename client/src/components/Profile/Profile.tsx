@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { authApi } from '../../services/authService';
 import { useToast } from '../../contexts/ToastContext';
+import { FiEdit2, FiStar } from 'react-icons/fi';
 import ChangePasswordModal from './ChangePasswordModal';
 import styles from './Profile.module.css';
 
@@ -48,6 +49,10 @@ const Profile: React.FC = () => {
           <div className={styles.userInfo}>
             <h1 className={styles.fullName}>{fullName}</h1>
             <p className={styles.position}>{user.position || 'Должность не указана'}</p>
+            <div className={styles.pointsDisplay}>
+              {FiStar({ size: 20 })}
+              <span>{user.points ?? 0} CDEK Coins</span>
+            </div>
             <div className={styles.actions}>
               <button 
                 type="button"

@@ -10,16 +10,9 @@ import ChoiceInput from '../../components/TestTaking/ChoiceInput';
 import TextInput from '../../components/TestTaking/TextInput';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import CompletionModal from '../../components/TestTaking/CompletionModal';
-import { 
-  format, 
-  addDays, 
-  startOfDay, 
-  addWeeks, 
-  startOfWeek, 
-  addMonths, 
-  startOfMonth 
-} from 'date-fns';
+import { startOfDay, startOfWeek, startOfMonth, addDays, addWeeks, addMonths, format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface TestData {
   id: number;
@@ -32,6 +25,7 @@ const TestTakingPage: React.FC = () => {
   const { testId } = useParams<{ testId: string }>();
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { updateUser } = useAuth();
 
   const [testData, setTestData] = useState<TestData | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -81,7 +75,11 @@ const TestTakingPage: React.FC = () => {
         answer,
       }));
 
-      await testApi.submitTest(parseInt(testId!), answersPayload);
+      const response = await testApi.submitTest(parseInt(testId!), answersPayload);
+      
+      if (response.new_points !== undefined) {
+        updateUser({ points: response.new_points });
+      }
       
       let nextDate: Date | null = null;
       const now = new Date();

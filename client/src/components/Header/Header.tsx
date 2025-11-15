@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import cdekLogo from '../../assets/CDEK_logo.png';
 import styles from './Header.module.css';
-import { FiLogIn, FiUserPlus, FiMenu, FiX } from 'react-icons/fi';
+import { FiLogIn, FiUserPlus, FiMenu, FiX, FiStar } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../Button/Button';
 import { NAVIGATION_TABS, type NavigationTab } from '../../constants/navigation';
@@ -42,14 +42,17 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onRegisterClick, activeTa
                 </Link>
               ))}
             </div>
-            <div className={styles.userInfo}>
-              <Link to="/profile" className={styles.profileLink}>
-                <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
-                {/* --- ИСПРАВЛЕНИЕ ЗДЕСЬ --- */}
-                <span className={styles.userName}>{user?.first_name || 'Профиль'}</span>
-              </Link>
-              <button onClick={logout} className={styles.logoutButton}>Выйти</button>
-            </div>
+              <div className={styles.userInfo}>
+                <div className={styles.pointsBadge}>
+                  {FiStar({})}
+                  <span>{user?.points ?? 0}</span>
+                </div>
+                <Link to="/profile" className={styles.profileLink}>
+                  <img src={avatarUrl} alt="Аватар" className={styles.headerAvatar} />
+                  <span className={styles.userName}>{user?.first_name || 'Профиль'}</span>
+                </Link>
+                <button onClick={logout} className={styles.logoutButton}>Выйти</button>
+              </div>
           </div>
 
           <div className={styles.mobileNav}>

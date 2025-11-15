@@ -30,6 +30,8 @@ class User(db.Model):
     
     current_recommendation = db.Column(db.Text, nullable=True)
     recommendation_updated_at = db.Column(db.DateTime, nullable=True)
+    
+    points = db.Column(db.Integer, nullable=False, default=0)
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
