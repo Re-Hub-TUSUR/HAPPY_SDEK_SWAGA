@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatView.module.css';
 import { chatApi } from '../../../services/chatService';
+import { FiSend } from 'react-icons/fi'; // <-- НОВЫЙ ИМПОРТ
 
 interface Message {
   text: string;
@@ -14,7 +15,6 @@ const ChatView: React.FC = () => {
   ]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,7 +88,8 @@ const ChatView: React.FC = () => {
           onClick={handleSendMessage}
           disabled={isTyping || !sessionId || !currentMessage.trim()}
         >
-          Отправить
+          {/* --- ИЗМЕНЕНИЕ ЗДЕСЬ --- */}
+          {FiSend({ size: 20 })}
         </button>
       </div>
     </div>

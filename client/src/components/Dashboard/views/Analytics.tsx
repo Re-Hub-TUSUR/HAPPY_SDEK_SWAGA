@@ -70,11 +70,23 @@ const Analytics: React.FC = () => {
               </div>
           </div>
           <div className={styles.statBlock}>
-              <h2 className={styles.sectionTitle}>Распределение по уровням</h2>
+              <h2 className={styles.sectionTitle}>Распределение</h2>
               <div className={styles.distribution}>
-                  <div className={styles.distItem}><span className={styles.low}>Низкий:</span> <strong>{overview.level_distribution.low}</strong> чел.</div>
-                  <div className={styles.distItem}><span className={styles.medium}>Умеренный:</span> <strong>{overview.level_distribution.medium}</strong> чел.</div>
-                  <div className={styles.distItem}><span className={styles.high}>Высокий:</span> <strong>{overview.level_distribution.high}</strong> чел.</div>
+                  <div className={styles.distItem}>
+                    <span className={styles.low}>Низкий:</span> 
+                    <strong>{overview.level_distribution.low}</strong>
+                    <span>чел.</span>
+                  </div>
+                  <div className={styles.distItem}>
+                    <span className={styles.medium}>Умеренный:</span> 
+                    <strong>{overview.level_distribution.medium}</strong>
+                    <span>чел.</span>
+                  </div>
+                  <div className={styles.distItem}>
+                    <span className={styles.high}>Высокий:</span> 
+                    <strong>{overview.level_distribution.high}</strong>
+                    <span>чел.</span>
+                  </div>
               </div>
           </div>
         </div>

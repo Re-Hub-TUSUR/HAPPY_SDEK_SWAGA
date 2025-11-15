@@ -52,21 +52,6 @@
   overflow-y: auto;
 }
 
-.content h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  color: #374151;
-}
-
-.recommendationText {
-  font-size: 1rem;
-  color: #4b5563;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
 .date {
   font-size: 0.9rem;
   color: #6b7280;
@@ -80,9 +65,16 @@
   padding: 16px;
 }
 
+.content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #374151;
+}
+
 .interpretationGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
 }
 

@@ -17,7 +17,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onRegisterClick
         isTransparent 
       />
       <div className={styles.contentWrapper}>
-        <Hero />
+        <Hero onRegisterClick={onRegisterClick} />
       </div>
     </div>
   );

@@ -3,7 +3,11 @@ import mascot from '../../assets/Maskot.png';
 import Button from '../Button/Button';
 import styles from './Hero.module.css';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onRegisterClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onRegisterClick }) => {
   return (
     <main className={styles.mainContent}>
       <div className={styles.heroText}>
@@ -13,7 +17,7 @@ const Hero: React.FC = () => {
           Проверьте свой уровень энергии, получите персональные рекомендации
           и ресурсы для восстановления, которые подходят именно Вам! :)
         </p>
-        <Button variant="cta">Хочу попробовать!</Button>
+        <Button variant="cta" onClick={onRegisterClick}>Хочу попробовать!</Button>
       </div>
       <div className={styles.heroImage}>
         <img src={mascot} alt="Маскот" />

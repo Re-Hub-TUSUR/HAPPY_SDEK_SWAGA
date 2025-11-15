@@ -50,12 +50,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, onRowClick }) => {
               className={styles.clickableRow} 
               onClick={() => onRowClick(result)}
             >
-              <td>{format(new Date(result.created_at), 'dd.MM.yyyy, HH:mm', { locale: ru })}</td>
-              <td>{result.test_title}</td>
-              <td>
+              <td data-label="Дата">{format(new Date(result.created_at), 'dd.MM.yyyy, HH:mm', { locale: ru })}</td>
+              <td data-label="Название">{result.test_title}</td>
+              <td data-label="Итоговый результат">
                 <ScoreDots score={getDisplayScore(result)} max={5} />
               </td>
-              <td className={styles.recommendationCell}>Просмотреть</td>
+              <td data-label="Рекомендации" className={styles.recommendationCell}>Просмотреть</td>
             </tr>
           ))}
         </tbody>

@@ -21,6 +21,8 @@
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
 }
 
 .sectionTitle {
@@ -41,13 +43,33 @@
 .distribution {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   font-size: 1.1rem;
+  flex-grow: 1;
+  justify-content: center; 
 }
-.distItem { display: flex; justify-content: space-between; }
-.low { color: #16a34a; }
-.medium { color: #ca8a04; }
-.high { color: #dc2626; }
+
+.distItem { 
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: baseline;
+}
+.distItem strong {
+  font-size: 1.25rem;
+  text-align: right;
+}
+
+.low { color: #16a34a; font-weight: 500; }
+.medium { color: #ca8a04; font-weight: 500; }
+.high { color: #dc2626; font-weight: 500; }
+
+.userSelectBlock {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 
 .userSelectBlock select {
   width: 100%;
@@ -78,14 +100,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .overviewGrid {
     grid-template-columns: 1fr;
   }
   .statCardGrid {
     grid-template-columns: 1fr;
+  }
+  
+  .detailHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .backButton {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
   }
 }
